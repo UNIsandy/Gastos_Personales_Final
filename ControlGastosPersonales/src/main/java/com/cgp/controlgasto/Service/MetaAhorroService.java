@@ -187,10 +187,20 @@ public class MetaAhorroService {
 
     @Transactional
     public boolean eliminar(Long id) {
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
-            return true;
+        MetaAhorro meta = repository.findById(id).orElse(null);
+        if (meta == null) return false;
+
+        double saldo = meta.getMontoActual() != null ? meta.getMontoActual() : 0.0;
+
+        if (saldo > 0) {
+            Categoria categoria = obtenerOCrearCategoriaAhorro();
+            transaccionRepository.save(new Transaccion(
+                "Devolución por eliminar meta: " + meta.getNombre(),
+                saldo, categoria, LocalDate.now(), TipoTransaccion.INGRESO, meta.getUsuario()
+            ));
         }
-        return false;
+
+        repository.delete(meta);
+        return true;
     }
 }
