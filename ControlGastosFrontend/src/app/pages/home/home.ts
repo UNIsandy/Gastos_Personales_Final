@@ -22,7 +22,8 @@ export class HomeComponent implements OnInit {
     this.service.listarPorUsuario().subscribe({
       next: (data) => {
         this.transacciones = data;
-        this.transaccionesRecientes = data.slice(0, 5);
+        const ordenadas = [...data].sort((a, b) => b.fecha.localeCompare(a.fecha));
+        this.transaccionesRecientes = ordenadas.slice(0, 5);
       },
       error: (err) => this.error = err.message
     });
