@@ -76,36 +76,26 @@
 
     &__btn {
         @include btn-base;
-        @include btn-primary;
         min-width: 120px;
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: #fff;
+        border: none;
+        font-weight: 700;
     }
 
-    &--exito {
-        .toast-modal__icono {
-            background: $color-ingreso-bg;
-            color: $color-ingreso;
-        }
-        .toast-modal__btn {
-            background-image: linear-gradient(135deg, #22c55e, #16a34a);
-        }
+    &--exito .toast-modal__icono {
+        background: $color-ingreso-bg;
+        color: $color-ingreso;
     }
 
-    &--error {
-        .toast-modal__icono {
-            background: $color-gasto-bg;
-            color: $color-gasto;
-        }
-        .toast-modal__btn {
-            background-image: none;
-            background-color: $color-gasto;
-        }
+    &--error .toast-modal__icono {
+        background: $color-gasto-bg;
+        color: $color-gasto;
     }
 
-    &--info {
-        .toast-modal__icono {
-            background: rgba(34, 211, 238, 0.18);
-            color: $color-primary;
-        }
+    &--info .toast-modal__icono {
+        background: rgba(34, 211, 238, 0.18);
+        color: $color-primary;
     }
 }
 
