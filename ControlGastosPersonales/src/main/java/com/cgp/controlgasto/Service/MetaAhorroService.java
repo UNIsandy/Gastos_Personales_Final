@@ -1,7 +1,10 @@
 package com.cgp.controlgasto.Service;
 
+import com.cgp.controlgasto.Model.Categoria;
 import com.cgp.controlgasto.Model.MetaAhorro;
 import com.cgp.controlgasto.Model.TipoTransaccion;
+import com.cgp.controlgasto.Model.Transaccion;
+import com.cgp.controlgasto.Repository.CategoriaRepository;
 import com.cgp.controlgasto.Repository.MetaAhorroRepository;
 import com.cgp.controlgasto.Repository.TransaccionRepository;
 import org.springframework.stereotype.Service;
@@ -15,10 +18,18 @@ public class MetaAhorroService {
 
     private final MetaAhorroRepository repository;
     private final TransaccionRepository transaccionRepository;
+    private final CategoriaRepository categoriaRepository;
 
-    public MetaAhorroService(MetaAhorroRepository repository, TransaccionRepository transaccionRepository) {
+    public MetaAhorroService(MetaAhorroRepository repository, TransaccionRepository transaccionRepository,
+                             CategoriaRepository categoriaRepository) {
         this.repository = repository;
         this.transaccionRepository = transaccionRepository;
+        this.categoriaRepository = categoriaRepository;
+    }
+
+    private Categoria obtenerOCrearCategoriaAhorro() {
+        return categoriaRepository.findByNombre("Ahorro")
+            .orElseGet(() -> categoriaRepository.save(new Categoria("Ahorro")));
     }
 
     @Transactional(readOnly = true)
@@ -103,26 +114,17 @@ public class MetaAhorroService {
             }
         } else {
             var transacciones = transaccionRepository.findByUsuarioId(usuarioId);
-
             double totalIngresos = transacciones.stream()
                 .filter(t -> t.getTipo() == TipoTransaccion.INGRESO)
                 .mapToDouble(t -> t.getMonto()).sum();
-
             double totalGastos = transacciones.stream()
                 .filter(t -> t.getTipo() == TipoTransaccion.GASTO)
                 .mapToDouble(t -> t.getMonto()).sum();
-
-            double totalAportado = repository.findByUsuarioIdAndActivaTrue(usuarioId).stream()
-                .mapToDouble(m -> m.getMontoActual() != null ? m.getMontoActual() : 0.0)
-                .sum() - (meta.getMontoActual() != null ? meta.getMontoActual() : 0.0);
-
-            double disponible = totalIngresos - totalGastos - totalAportado;
+            double disponible = totalIngresos - totalGastos;
             if (monto > disponible) {
                 throw new RuntimeException(
                     "No tienes suficiente saldo disponible. Tus ingresos netos son S/ "
-                    + String.format("%.2f", totalIngresos - totalGastos)
-                    + ", ya has destinado S/ " + String.format("%.2f", totalAportado)
-                    + " a otras metas activas. Disponible: S/ " + String.format("%.2f", disponible)
+                    + String.format("%.2f", disponible) + "."
                 );
             }
         }
@@ -133,7 +135,20 @@ public class MetaAhorroService {
         } else {
             meta.setActiva(true);
         }
-        return repository.save(meta);
+        MetaAhorro guardada = repository.save(meta);
+
+        Categoria categoria = obtenerOCrearCategoriaAhorro();
+        if (monto > 0) {
+            String desc = "Aporte a meta: " + meta.getNombre();
+            transaccionRepository.save(new Transaccion(desc, monto, categoria,
+                LocalDate.now(), TipoTransaccion.GASTO, meta.getUsuario()));
+        } else {
+            String desc = "Retiro de meta: " + meta.getNombre();
+            transaccionRepository.save(new Transaccion(desc, -monto, categoria,
+                LocalDate.now(), TipoTransaccion.INGRESO, meta.getUsuario()));
+        }
+
+        return guardada;
     }
 
     @Transactional
@@ -145,28 +160,29 @@ public class MetaAhorroService {
         if (nuevaFechaLimite.isBefore(LocalDate.now())) throw new RuntimeException("La nueva fecha debe ser futura");
         if (aporteInicial == null || aporteInicial <= 0) throw new RuntimeException("Debes hacer un aporte inicial para reactivar la meta");
 
-        if (aporteInicial > 0) {
-            var transacciones = transaccionRepository.findByUsuarioId(meta.getUsuario().getId());
-            double totalIngresos = transacciones.stream()
-                .filter(t -> t.getTipo() == TipoTransaccion.INGRESO)
-                .mapToDouble(t -> t.getMonto()).sum();
-            double totalGastos = transacciones.stream()
-                .filter(t -> t.getTipo() == TipoTransaccion.GASTO)
-                .mapToDouble(t -> t.getMonto()).sum();
-            double totalAportado = repository.findByUsuarioIdAndActivaTrue(meta.getUsuario().getId()).stream()
-                .mapToDouble(m -> m.getMontoActual() != null ? m.getMontoActual() : 0.0)
-                .sum();
-            double disponible = totalIngresos - totalGastos - totalAportado;
-            if (aporteInicial > disponible) {
-                throw new RuntimeException("No tienes suficiente saldo. Disponible: S/ "
-                    + String.format("%.2f", disponible));
-            }
+        var transacciones = transaccionRepository.findByUsuarioId(meta.getUsuario().getId());
+        double totalIngresos = transacciones.stream()
+            .filter(t -> t.getTipo() == TipoTransaccion.INGRESO)
+            .mapToDouble(t -> t.getMonto()).sum();
+        double totalGastos = transacciones.stream()
+            .filter(t -> t.getTipo() == TipoTransaccion.GASTO)
+            .mapToDouble(t -> t.getMonto()).sum();
+        double disponible = totalIngresos - totalGastos;
+        if (aporteInicial > disponible) {
+            throw new RuntimeException("No tienes suficiente saldo. Disponible: S/ "
+                + String.format("%.2f", disponible));
         }
 
         meta.setActiva(true);
         meta.setFechaLimite(nuevaFechaLimite);
         meta.setMontoActual(meta.getMontoActual() + aporteInicial);
-        return repository.save(meta);
+        MetaAhorro guardada = repository.save(meta);
+
+        Categoria categoria = obtenerOCrearCategoriaAhorro();
+        transaccionRepository.save(new Transaccion("Aporte inicial para reactivar: " + meta.getNombre(),
+            aporteInicial, categoria, LocalDate.now(), TipoTransaccion.GASTO, meta.getUsuario()));
+
+        return guardada;
     }
 
     @Transactional
