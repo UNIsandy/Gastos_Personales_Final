@@ -160,139 +160,231 @@ public class AnalyticsService {
         double prediccion) {
 
     List<ConsejoDTO> consejos = new ArrayList<>();
+    int mesActual = LocalDate.now().getMonthValue();
+    int anioActual = LocalDate.now().getYear();
 
     //---------------------------------------
-    // Balance
+    // Balance general
     //---------------------------------------
 
     if (totalIngresos > 0) {
-
         double ahorro = totalIngresos - totalGastos;
         double porcentaje = (ahorro / totalIngresos) * 100;
 
         if (porcentaje >= 20) {
-
             consejos.add(new ConsejoDTO(
                     "Excelente ahorro",
                     "Lograste ahorrar el "
                             + String.format("%.1f", porcentaje)
-                            + "% de tus ingresos.",
+                            + "% de tus ingresos. Sigue así, estás construyendo un buen colchón financiero.",
                     "success",
                     "💰",
                     1
             ));
-
         } else if (porcentaje >= 10) {
-
             consejos.add(new ConsejoDTO(
                     "Buen progreso",
-                    "Podrías incrementar un poco más tu ahorro para alcanzar el 20%.",
+                    "Ahorras el " + String.format("%.1f", porcentaje)
+                            + "% de tus ingresos. Si reduces solo S/ "
+                            + String.format("%.2f", totalIngresos * 0.05)
+                            + " en gastos este mes, llegarías al 15% de ahorro.",
                     "info",
                     "📈",
                     2
             ));
-
         } else if (porcentaje >= 0) {
-
+            double metaAhorro = totalIngresos * 0.10;
+            double falta = metaAhorro - ahorro;
             consejos.add(new ConsejoDTO(
                     "Ahorro bajo",
-                    "Tu capacidad de ahorro es baja. Revisa tus gastos principales.",
+                    "Tu ahorro es solo del " + String.format("%.1f", porcentaje)
+                            + "% de tus ingresos. Necesitas reducir unos S/ "
+                            + String.format("%.2f", falta)
+                            + " en gastos este mes para llegar al 10%. Revisa tus categorías principales.",
                     "warning",
                     "⚠️",
                     1
             ));
-
         } else {
-
+            double exceso = -ahorro;
             consejos.add(new ConsejoDTO(
                     "Déficit",
-                    "Este mes gastaste más dinero del que ingresó.",
+                    "Gastaste S/ " + String.format("%.2f", exceso)
+                            + " más de lo que ingresaste. Si reduces S/ "
+                            + String.format("%.2f", exceso / 15)
+                            + " al día en los próximos 15 días, equilibrarías tu balance.",
                     "danger",
                     "🚨",
                     1
             ));
-
         }
-
     }
 
     //---------------------------------------
-    // Categoría con mayor gasto
+    // Análisis por categoría
     //---------------------------------------
 
-    if (!gastosPorCategoria.isEmpty()) {
+    if (!gastosPorCategoria.isEmpty() && totalGastos > 0) {
+        List<Map.Entry<String, Double>> categoriasOrdenadas = gastosPorCategoria.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                .toList();
 
-        Map.Entry<String, Double> mayor =
-                gastosPorCategoria.entrySet()
-                        .stream()
-                        .max(Map.Entry.comparingByValue())
-                        .orElse(null);
+        for (int i = 0; i < Math.min(3, categoriasOrdenadas.size()); i++) {
+            Map.Entry<String, Double> entry = categoriasOrdenadas.get(i);
+            String categoria = entry.getKey();
+            double monto = entry.getValue();
+            double pct = (monto / totalGastos) * 100;
 
-        if (mayor != null) {
-
-            double porcentaje =
-                    (mayor.getValue() / totalGastos) * 100;
-
-            if (porcentaje >= 35) {
-
+            if (pct >= 25) {
+                double ahorroPotencial = monto * 0.15;
+                double diario = ahorroPotencial / 20;
                 consejos.add(new ConsejoDTO(
-                        "Mayor gasto",
-                        "La categoría "
-                                + mayor.getKey()
-                                + " representa el "
-                                + String.format("%.1f", porcentaje)
-                                + "% de tus gastos. Reduciendo un 10% ahorrarías aproximadamente S/"
-                                + String.format("%.2f", mayor.getValue() * 0.10),
+                        categoria + " es tu mayor gasto",
+                        "Representa el " + String.format("%.1f", pct)
+                                + "% de tus gastos (S/ " + String.format("%.2f", monto)
+                                + "). Reduciendo S/ " + String.format("%.2f", diario)
+                                + " al día en esta categoría, en 20 días ahorrarías S/ "
+                                + String.format("%.2f", ahorroPotencial) + ".",
                         "warning",
-                        "🍽️",
+                        i == 0 ? "🍽️" : (i == 1 ? "🚗" : "🛍️"),
                         1
                 ));
-
+            } else if (pct >= 15) {
+                double ahorroPotencial = monto * 0.10;
+                consejos.add(new ConsejoDTO(
+                        "Revisa " + categoria,
+                        "Gastaste S/ " + String.format("%.2f", monto)
+                                + " en " + categoria.toLowerCase()
+                                + " (" + String.format("%.1f", pct)
+                                + "% del total). Un pequeño ajuste del 10% te ahorraría S/ "
+                                + String.format("%.2f", ahorroPotencial) + " este mes.",
+                        "info",
+                        "📋",
+                        2
+                ));
             }
-
         }
-
     }
 
     //---------------------------------------
-    // Predicción
+    // Predicción vs gasto actual
     //---------------------------------------
 
-    if (prediccion > totalGastos * 1.10 && totalGastos > 0) {
+    if (prediccion > 0 && totalGastos > 0) {
+        double gastoDiarioActual = totalGastos / 30.0;
+        double gastoDiarioPredicho = prediccion / 30.0;
 
-        consejos.add(new ConsejoDTO(
-                "Predicción",
-                "Según tu comportamiento podrías gastar S/"
-                        + String.format("%.2f", prediccion)
-                        + " el próximo mes.",
-                "info",
-                "📊",
-                3
-        ));
-
+        if (prediccion > totalGastos * 1.15) {
+            double aumento = prediccion - totalGastos;
+            double reduccionDiaria = aumento / 30;
+            consejos.add(new ConsejoDTO(
+                    "Gasto en aumento",
+                    "Se prevé que el próximo mes gastes S/ "
+                            + String.format("%.2f", aumento)
+                            + " más que este mes. Si reduces S/ "
+                            + String.format("%.2f", reduccionDiaria)
+                            + " al día desde ahora, evitarías este aumento.",
+                    "warning",
+                    "📊",
+                    1
+            ));
+        }
     }
 
     //---------------------------------------
-    // Compras pequeñas
+    // Comparación con meses anteriores
     //---------------------------------------
 
-    long comprasPequenas =
-            transacciones.stream()
-                    .filter(t ->
-                            t.getTipo() == TipoTransaccion.GASTO
-                                    && t.getMonto() < 20)
-                    .count();
+    double gastoMesAnterior = transacciones.stream()
+            .filter(t -> t.getTipo() == TipoTransaccion.GASTO)
+            .filter(t -> {
+                int m = t.getFecha().getMonthValue();
+                int y = t.getFecha().getYear();
+                return m == (mesActual == 1 ? 12 : mesActual - 1)
+                        && y == (mesActual == 1 ? anioActual - 1 : anioActual);
+            })
+            .mapToDouble(Transaccion::getMonto).sum();
+
+    double gastoEsteMes = transacciones.stream()
+            .filter(t -> t.getTipo() == TipoTransaccion.GASTO
+                    && t.getFecha().getMonthValue() == mesActual
+                    && t.getFecha().getYear() == anioActual)
+            .mapToDouble(Transaccion::getMonto).sum();
+
+    if (gastoMesAnterior > 0 && gastoEsteMes > 0) {
+        double diff = gastoEsteMes - gastoMesAnterior;
+        double pctCambio = (diff / gastoMesAnterior) * 100;
+
+        if (pctCambio > 20) {
+            double diario = diff / LocalDate.now().lengthOfMonth();
+            consejos.add(new ConsejoDTO(
+                    "Gasto subió respecto al mes pasado",
+                    "Este mes gastas " + String.format("%.0f", pctCambio)
+                            + "% más que el mes anterior (S/ " + String.format("%.2f", diario)
+                            + " más por día). Identifica qué gastos nuevos aparecieron.",
+                    "warning",
+                    "📈",
+                    2
+            ));
+        } else if (pctCambio < -15) {
+            consejos.add(new ConsejoDTO(
+                    "Vas mejor que el mes pasado",
+                    "Has reducido tus gastos en un " + String.format("%.0f", Math.abs(pctCambio))
+                            + "% comparado con el mes anterior. ¡Sigue así!",
+                    "success",
+                    "🎉",
+                    2
+            ));
+        }
+    }
+
+    //---------------------------------------
+    // Pequeños gastos frecuentes
+    //---------------------------------------
+
+    long comprasPequenas = transacciones.stream()
+            .filter(t -> t.getTipo() == TipoTransaccion.GASTO && t.getMonto() < 20)
+            .count();
 
     if (comprasPequenas >= 10) {
-
+        double totalPequeno = transacciones.stream()
+                .filter(t -> t.getTipo() == TipoTransaccion.GASTO && t.getMonto() < 20)
+                .mapToDouble(Transaccion::getMonto).sum();
         consejos.add(new ConsejoDTO(
-                "Compras frecuentes",
-                "Detectamos muchas compras pequeñas. Revisa estos gastos porque suelen acumularse.",
-                "warning",
+                comprasPequenas >= 15 ? "Muchos gastos pequeños" : "Compras pequeñas frecuentes",
+                "Tienes " + comprasPequenas + " gastos menores a S/ 20 que suman S/ "
+                        + String.format("%.2f", totalPequeno)
+                        + ". Si reduces la mitad, ahorrarías S/ "
+                        + String.format("%.2f", totalPequeno * 0.50) + " este mes.",
+                "info",
                 "🛒",
                 2
         ));
+    }
 
+    //---------------------------------------
+    // Categoría con muchos gastos chicos
+    //---------------------------------------
+
+    if (!gastosPorCategoria.isEmpty()) {
+        for (Map.Entry<String, Double> entry : gastosPorCategoria.entrySet()) {
+            if (entry.getValue() >= totalGastos * 0.20 && entry.getValue() >= 100) {
+                double ahorro3Dias = entry.getValue() / 30 * 3;
+                consejos.add(new ConsejoDTO(
+                        "Reto de 3 días para " + entry.getKey(),
+                        "Si durante 3 días reduces al máximo el gasto en "
+                                + entry.getKey().toLowerCase()
+                                + ", podrías ahorrar aproximadamente S/ "
+                                + String.format("%.2f", ahorro3Dias)
+                                + ". Úsalo para tu meta de ahorro.",
+                        "info",
+                        "🎯",
+                        3
+                ));
+                break;
+            }
+        }
     }
 
     //---------------------------------------
@@ -300,20 +392,25 @@ public class AnalyticsService {
     //---------------------------------------
 
     if (totalIngresos == 0) {
-
         consejos.add(new ConsejoDTO(
-                "Registra ingresos",
-                "Aún no registras ingresos este mes. Esto permitirá generar mejores recomendaciones.",
+                "Registra tus ingresos",
+                "Aún no registras ingresos. Sin esta información no puedo darte recomendaciones precisas.",
                 "info",
                 "💵",
                 2
         ));
+    }
 
+    if (totalIngresos == 0 && totalGastos > 0) {
+        consejos.add(new ConsejoDTO(
+                "Gastas sin ingresos",
+                "Tienes gastos registrados pero ningún ingreso. Tus metas de ahorro no son sostenibles así.",
+                "danger",
+                "🚨",
+                1
+        ));
     }
 
     consejos.sort(Comparator.comparingInt(ConsejoDTO::getPrioridad));
-
     return consejos;
-
-        }
-}
+    }
