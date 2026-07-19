@@ -1,9 +1,15 @@
-<div class="toast-container">
-    @for (toast of notificaciones.toasts(); track toast.id) {
-        <div class="toast" [class]="'toast--' + toast.tipo">
-            <span class="toast__icono">{{ iconoDe(toast.tipo) }}</span>
-            <span class="toast__mensaje">{{ toast.mensaje }}</span>
-            <button type="button" class="toast__cerrar" (click)="notificaciones.cerrarToast(toast.id)" aria-label="Cerrar">×</button>
+@if (toastActual(); as toast) {
+    <div class="toast-overlay" (click)="notificaciones.cerrarToast(toast.id)">
+        <div class="toast-modal" [class]="'toast-modal--' + toast.tipo" (click)="$event.stopPropagation()">
+            <div class="toast-modal__header">
+                <span class="toast-modal__icono">{{ iconoDe(toast.tipo) }}</span>
+                <span class="toast-modal__titulo">{{ tituloDe(toast.tipo) }}</span>
+                <button type="button" class="toast-modal__cerrar" (click)="notificaciones.cerrarToast(toast.id)">×</button>
+            </div>
+            <p class="toast-modal__mensaje">{{ toast.mensaje }}</p>
+            <div class="toast-modal__acciones">
+                <button type="button" class="toast-modal__btn" (click)="notificaciones.cerrarToast(toast.id)">Cerrar</button>
+            </div>
         </div>
-    }
-</div>
+    </div>
+}

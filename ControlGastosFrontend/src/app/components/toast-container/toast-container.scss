@@ -1,63 +1,59 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
-.toast-container {
+.toast-overlay {
     position: fixed;
-    top: $spacing-lg;
-    right: $spacing-lg;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-sm;
-    max-width: 380px;
-
-    @include respond-to('sm') {
-        left: $spacing-sm;
-        right: $spacing-sm;
-        top: $spacing-sm;
-        max-width: none;
-    }
+    inset: 0;
+    z-index: 1200;
+    display: grid;
+    place-items: center;
+    background: rgba(4, 9, 17, 0.62);
+    backdrop-filter: blur(4px);
+    padding: $spacing-lg;
+    animation: overlay-in 0.18s ease;
 }
 
-.toast {
-    display: flex;
-    align-items: center;
-    gap: $spacing-sm;
-    background: $gradient-panel;
-    border: 1px solid $color-border;
-    border-radius: $border-radius-md;
-    box-shadow: $shadow-md;
-    backdrop-filter: blur(18px);
-    padding: $spacing-sm $spacing-md;
-    color: $color-text;
-    font-size: $font-size-sm;
-    font-weight: 600;
-    animation: toast-in 0.22s ease;
+.toast-modal {
+    @include card;
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    animation: dialog-in 0.22s ease;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+        margin-bottom: $spacing-md;
+    }
 
     &__icono {
         display: grid;
         place-items: center;
-        width: 22px;
-        height: 22px;
-        min-width: 22px;
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
         border-radius: $border-radius-sm;
-        font-size: $font-size-xs;
+        font-size: $font-size-sm;
         font-weight: 900;
     }
 
-    &__mensaje {
+    &__titulo {
         flex: 1;
-        line-height: 1.4;
+        font-size: $font-size-md;
+        font-weight: 800;
+        color: $color-text;
+        text-align: left;
     }
 
     &__cerrar {
         background: none;
         border: none;
         color: $color-text-muted;
-        font-size: $font-size-md;
+        font-size: $font-size-lg;
         line-height: 1;
         cursor: pointer;
-        padding: 0 0 0 $spacing-xs;
+        padding: 0;
         transition: color 0.18s ease;
 
         &:hover {
@@ -65,41 +61,66 @@
         }
     }
 
-    &--exito {
-        border-color: rgba($color-ingreso, 0.32);
+    &__mensaje {
+        color: $color-text-light;
+        font-size: $font-size-sm;
+        line-height: 1.5;
+        margin-bottom: $spacing-lg;
+        text-align: left;
+    }
 
-        .toast__icono {
+    &__acciones {
+        display: flex;
+        justify-content: center;
+    }
+
+    &__btn {
+        @include btn-base;
+        @include btn-primary;
+        min-width: 120px;
+    }
+
+    &--exito {
+        .toast-modal__icono {
             background: $color-ingreso-bg;
             color: $color-ingreso;
+        }
+        .toast-modal__btn {
+            background-image: linear-gradient(135deg, #22c55e, #16a34a);
         }
     }
 
     &--error {
-        border-color: rgba($color-gasto, 0.32);
-
-        .toast__icono {
+        .toast-modal__icono {
             background: $color-gasto-bg;
             color: $color-gasto;
+        }
+        .toast-modal__btn {
+            background-image: none;
+            background-color: $color-gasto;
         }
     }
 
     &--info {
-        border-color: rgba($color-primary, 0.32);
-
-        .toast__icono {
+        .toast-modal__icono {
             background: rgba(34, 211, 238, 0.18);
             color: $color-primary;
         }
     }
 }
 
-@keyframes toast-in {
+@keyframes overlay-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes dialog-in {
     from {
         opacity: 0;
-        transform: translateX(24px);
+        transform: translateY(-12px) scale(0.97);
     }
     to {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateY(0) scale(1);
     }
 }
