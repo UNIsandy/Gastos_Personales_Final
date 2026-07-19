@@ -8,7 +8,7 @@
     }
 
     <div class="home__lista">
-        @for (t of transacciones; track t.id) {
+        @for (t of transaccionesRecientes; track t.id) {
             <app-tarjeta-gasto
                 [id]="t.id!"
                 [tipo]="t.tipo"

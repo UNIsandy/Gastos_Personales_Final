@@ -13,13 +13,17 @@ import { CommonModule } from '@angular/common';
 })
 export class HomeComponent implements OnInit {
   transacciones: Transaccion[] = [];
+  transaccionesRecientes: Transaccion[] = [];
   error = '';
 
   constructor(private service: TransaccionService) {}
 
   ngOnInit() {
     this.service.listarPorUsuario().subscribe({
-      next: (data) => this.transacciones = data.slice(0, 5),
+      next: (data) => {
+        this.transacciones = data;
+        this.transaccionesRecientes = data.slice(0, 5);
+      },
       error: (err) => this.error = err.message
     });
   }
