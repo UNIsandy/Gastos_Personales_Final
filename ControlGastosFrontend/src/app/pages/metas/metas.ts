@@ -77,16 +77,17 @@ export class MetasComponent implements OnInit {
   }
 
   get nivelGlobal(): string {
-    const completadas = this.metas.filter(m => !m.activa).length;
+    const completadas = this.metas.filter(m => !m.activa && !this.esVencida(m)).length;
     if (completadas >= 5) return 'ORO';
     if (completadas >= 3) return 'PLATA';
     return 'BRONCE';
   }
 
   get progresoGlobal(): number {
-    if (this.metas.length === 0) return 0;
-    const totalObjetivo = this.metas.reduce((s, m) => s + m.montoObjetivo, 0);
-    const totalActual = this.metas.reduce((s, m) => s + m.montoActual, 0);
+    const activas = this.metas.filter(m => m.activa);
+    if (activas.length === 0) return 0;
+    const totalObjetivo = activas.reduce((s, m) => s + m.montoObjetivo, 0);
+    const totalActual = activas.reduce((s, m) => s + m.montoActual, 0);
     return Math.min(100, Math.round((totalActual / totalObjetivo) * 100));
   }
 
