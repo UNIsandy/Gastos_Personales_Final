@@ -1,0 +1,188 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.programadas {
+  max-width: 820px;
+  margin: 0 auto;
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: $spacing-lg;
+
+    h1 {
+      font-size: $font-size-xxl;
+      font-weight: 800;
+      color: $color-text;
+      margin: 0;
+    }
+  }
+
+  &__eyebrow {
+    color: $color-primary;
+    font-size: $font-size-xs;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  &__btn-nueva {
+    @include btn-primary;
+  }
+
+  &__form {
+    @include card;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: $spacing-md;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__campo {
+    min-width: 0;
+  }
+
+  &__label {
+    display: block;
+    font-size: $font-size-sm;
+    font-weight: 700;
+    color: $color-text-light;
+    margin-bottom: $spacing-xs;
+  }
+
+  &__input,
+  &__select {
+    @include input;
+
+    &--invalid {
+      border-color: $color-gasto;
+      background: rgba($color-gasto, 0.08);
+    }
+  }
+
+  &__error {
+    display: block;
+    color: $color-gasto;
+    font-size: $font-size-xs;
+    font-weight: 650;
+    margin-top: $spacing-xs;
+  }
+
+  &__acciones {
+    display: flex;
+    gap: $spacing-md;
+    margin-top: $spacing-sm;
+    grid-column: 1 / -1;
+  }
+
+  &__btn-guardar {
+    @include btn-primary;
+  }
+
+  &__btn-cancelar {
+    @include btn-base;
+    background: rgba(255, 255, 255, 0.06);
+    color: $color-text;
+    border: 1px solid $color-border;
+  }
+
+  &__cargando {
+    text-align: center;
+    color: $color-text-light;
+    padding: $spacing-xl;
+  }
+
+  &__vacio {
+    text-align: center;
+    padding: $spacing-xl * 2;
+    color: $color-text-light;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px dashed $color-border;
+    border-radius: $border-radius-lg;
+
+    p {
+      margin: 0;
+      &:first-child {
+        font-size: $font-size-lg;
+        margin-bottom: $spacing-xs;
+      }
+    }
+  }
+
+  &__lista {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__item {
+    @include card;
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    padding: $spacing-md;
+    border-color: rgba($color-primary, 0.1);
+
+    &--ingreso {
+      border-color: rgba(#22c55e, 0.2);
+    }
+
+    &-info {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      flex: 1;
+      min-width: 0;
+
+      strong {
+        display: block;
+        font-size: $font-size-sm;
+        color: $color-text;
+      }
+    }
+
+    &-icono {
+      font-size: 1.4rem;
+    }
+
+    &-meta {
+      font-size: $font-size-xs;
+      color: $color-text-light;
+    }
+
+    &-monto {
+      font-weight: 800;
+      font-size: $font-size-sm;
+      white-space: nowrap;
+
+      &.gasto { color: $color-gasto; }
+      &.ingreso { color: #22c55e; }
+    }
+
+    &-eliminar {
+      @include btn-base;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border-radius: 50%;
+      background: rgba($color-gasto, 0.1);
+      color: $color-gasto;
+      border: none;
+      font-size: $font-size-xs;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  @include respond-to('md') {
+    &__form {
+      grid-template-columns: 1fr;
+    }
+    &__header {
+      flex-direction: column;
+      gap: $spacing-md;
+    }
+  }
+}

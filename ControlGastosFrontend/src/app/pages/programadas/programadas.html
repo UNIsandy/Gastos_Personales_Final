@@ -1,0 +1,102 @@
+<div class="programadas">
+  <div class="programadas__header">
+    <div>
+      <span class="programadas__eyebrow">Programadas</span>
+      <h1>Transacciones Programadas</h1>
+    </div>
+    <button class="programadas__btn-nueva" (click)="toggleForm()">
+      {{ mostrandoForm ? 'Cancelar' : '+ Nueva programada' }}
+    </button>
+  </div>
+
+  @if (mostrandoForm) {
+    <form class="programadas__form" [formGroup]="formulario" (ngSubmit)="guardar()">
+      <div class="programadas__campo">
+        <label class="programadas__label">Descripción</label>
+        <input class="programadas__input" formControlName="descripcion"
+               [class.programadas__input--invalid]="cDescripcion?.invalid && cDescripcion?.touched"
+               placeholder="Ej: Pago de internet">
+        @if (cDescripcion?.invalid && cDescripcion?.touched) {
+          <span class="programadas__error">
+            @if (cDescripcion?.errors?.['required']) { La descripción es obligatoria }
+            @if (cDescripcion?.errors?.['minlength']) { Mínimo 3 caracteres }
+          </span>
+        }
+      </div>
+
+      <div class="programadas__campo">
+        <label class="programadas__label">Monto</label>
+        <input class="programadas__input" type="number" formControlName="monto" step="0.01"
+               [class.programadas__input--invalid]="cMonto?.invalid && cMonto?.touched"
+               placeholder="Ej: 50.00">
+        @if (cMonto?.invalid && cMonto?.touched) {
+          <span class="programadas__error">
+            @if (cMonto?.errors?.['required']) { El monto es obligatorio }
+            @if (cMonto?.errors?.['min']) { Debe ser mayor a 0 }
+          </span>
+        }
+      </div>
+
+      <div class="programadas__campo">
+        <label class="programadas__label">Tipo</label>
+        <select class="programadas__select" formControlName="tipo">
+          <option value="GASTO">Gasto</option>
+          <option value="INGRESO">Ingreso</option>
+        </select>
+      </div>
+
+      <div class="programadas__campo">
+        <label class="programadas__label">Categoría</label>
+        <select class="programadas__select" formControlName="categoria">
+          <option value="Alimentación">Alimentación</option>
+          <option value="Transporte">Transporte</option>
+          <option value="Entretenimiento">Entretenimiento</option>
+          <option value="Trabajo">Trabajo</option>
+          <option value="Salud">Salud</option>
+          <option value="Otros">Otros</option>
+        </select>
+      </div>
+
+      <div class="programadas__campo">
+        <label class="programadas__label">Fecha programada</label>
+        <input class="programadas__input" type="date" formControlName="fecha"
+               [class.programadas__input--invalid]="cFecha?.invalid && cFecha?.touched">
+        @if (cFecha?.invalid && cFecha?.touched) {
+          <span class="programadas__error">La fecha es obligatoria</span>
+        }
+      </div>
+
+      <div class="programadas__acciones">
+        <button type="submit" class="programadas__btn-guardar">Guardar</button>
+        <button type="button" class="programadas__btn-cancelar" (click)="toggleForm()">Cancelar</button>
+      </div>
+    </form>
+  }
+
+  @if (cargando) {
+    <p class="programadas__cargando">Cargando...</p>
+  } @else if (transacciones.length === 0) {
+    <div class="programadas__vacio">
+      <p>No tienes transacciones programadas.</p>
+      <p>Las transacciones con fecha futura aparecerán aquí.</p>
+    </div>
+  } @else {
+    <div class="programadas__lista">
+      @for (t of transacciones; track t.id) {
+        <div class="programadas__item" [class.programadas__item--ingreso]="t.tipo === 'INGRESO'">
+          <div class="programadas__item-info">
+            <span class="programadas__item-icono">{{ t.tipo === 'GASTO' ? '📅' : '📅' }}</span>
+            <div>
+              <strong>{{ t.descripcion }}</strong>
+              <span class="programadas__item-meta">{{ t.categoria?.nombre }} · {{ t.fecha }}</span>
+            </div>
+          </div>
+          <div class="programadas__item-monto {{ t.tipo === 'GASTO' ? 'gasto' : 'ingreso' }}">
+            {{ t.tipo === 'GASTO' ? '-' : '+' }}S/ {{ t.monto.toFixed(2) }}
+          </div>
+          <button class="programadas__item-eliminar" (click)="eliminar(t)">✕</button>
+        </div>
+      }
+    </div>
+  }
+</div>

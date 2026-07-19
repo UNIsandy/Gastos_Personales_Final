@@ -65,6 +65,14 @@
         margin-top: $spacing-xs;
     }
 
+    &__link {
+        color: $color-primary;
+        text-decoration: underline;
+        display: inline-block;
+        margin-top: $spacing-xs;
+        font-weight: 700;
+    }
+
     &__error-msg {
         background: $color-gasto-light;
         padding: $spacing-sm $spacing-md;

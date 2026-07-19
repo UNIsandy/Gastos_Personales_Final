@@ -6,6 +6,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard';
 import { MetasComponent } from './pages/metas/metas';
 import { LoginComponent } from './pages/login/login';
 import { RegistroComponent } from './pages/registro/registro';
+import { ProgramadasComponent } from './pages/programadas/programadas';
 import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -18,5 +19,6 @@ export const routes: Routes = [
     { path: 'formulario/:id', component: FormularioComponent, canActivate: [AuthGuard] },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
     { path: 'metas', component: MetasComponent, canActivate: [AuthGuard] },
+    { path: 'programadas', component: ProgramadasComponent, canActivate: [AuthGuard] },
     { path: '**', redirectTo: '/home' }
 ];

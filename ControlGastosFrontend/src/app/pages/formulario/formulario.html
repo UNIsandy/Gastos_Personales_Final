@@ -62,7 +62,13 @@
             <input class="formulario__input" type="date" formControlName="fecha"
                    [class.formulario__input--invalid]="campoFecha?.invalid && campoFecha?.touched">
             @if (campoFecha?.invalid && campoFecha?.touched) {
-                <span class="formulario__error">La fecha es obligatoria</span>
+                <span class="formulario__error">
+                    @if (campoFecha?.errors?.['required']) { La fecha es obligatoria }
+                    @if (campoFecha?.errors?.['fechaFutura']) {
+                        No puedes registrar transacciones futuras aquí.
+                        <a routerLink="/programadas" class="formulario__link">Crearla en Transacciones Programadas</a>
+                    }
+                </span>
             }
         </div>
 
