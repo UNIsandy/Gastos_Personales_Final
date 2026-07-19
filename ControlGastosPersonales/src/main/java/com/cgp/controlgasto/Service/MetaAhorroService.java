@@ -66,35 +66,48 @@ public class MetaAhorroService {
     public MetaAhorro aportar(Long id, Double monto) {
         MetaAhorro meta = repository.findById(id).orElse(null);
         if (meta == null) return null;
-        if (monto == null || monto <= 0) throw new RuntimeException("El monto debe ser mayor que cero");
+        if (monto == null || monto == 0) throw new RuntimeException("El monto debe ser diferente de cero");
 
         Long usuarioId = meta.getUsuario().getId();
-        var transacciones = transaccionRepository.findByUsuarioId(usuarioId);
 
-        double totalIngresos = transacciones.stream()
-            .filter(t -> t.getTipo() == TipoTransaccion.INGRESO)
-            .mapToDouble(t -> t.getMonto()).sum();
+        if (monto < 0) {
+            double retiro = -monto;
+            if (retiro > meta.getMontoActual()) {
+                throw new RuntimeException("No puedes retirar más de lo que has aportado. Aportado: S/ "
+                    + String.format("%.2f", meta.getMontoActual()));
+            }
+        } else {
+            var transacciones = transaccionRepository.findByUsuarioId(usuarioId);
 
-        double totalGastos = transacciones.stream()
-            .filter(t -> t.getTipo() == TipoTransaccion.GASTO)
-            .mapToDouble(t -> t.getMonto()).sum();
+            double totalIngresos = transacciones.stream()
+                .filter(t -> t.getTipo() == TipoTransaccion.INGRESO)
+                .mapToDouble(t -> t.getMonto()).sum();
 
-        double totalAportado = repository.findByUsuarioId(usuarioId).stream()
-            .mapToDouble(m -> m.getMontoActual() != null ? m.getMontoActual() : 0.0)
-            .sum() - (meta.getMontoActual() != null ? meta.getMontoActual() : 0.0);
+            double totalGastos = transacciones.stream()
+                .filter(t -> t.getTipo() == TipoTransaccion.GASTO)
+                .mapToDouble(t -> t.getMonto()).sum();
 
-        double disponible = totalIngresos - totalGastos - totalAportado;
-        if (monto > disponible) {
-            throw new RuntimeException(
-                "No tienes suficiente saldo disponible. Tus ingresos netos son S/ "
-                + String.format("%.2f", totalIngresos - totalGastos)
-                + ", ya has destinado S/ " + String.format("%.2f", totalAportado)
-                + " a otras metas. Disponible: S/ " + String.format("%.2f", disponible)
-            );
+            double totalAportado = repository.findByUsuarioId(usuarioId).stream()
+                .mapToDouble(m -> m.getMontoActual() != null ? m.getMontoActual() : 0.0)
+                .sum() - (meta.getMontoActual() != null ? meta.getMontoActual() : 0.0);
+
+            double disponible = totalIngresos - totalGastos - totalAportado;
+            if (monto > disponible) {
+                throw new RuntimeException(
+                    "No tienes suficiente saldo disponible. Tus ingresos netos son S/ "
+                    + String.format("%.2f", totalIngresos - totalGastos)
+                    + ", ya has destinado S/ " + String.format("%.2f", totalAportado)
+                    + " a otras metas. Disponible: S/ " + String.format("%.2f", disponible)
+                );
+            }
         }
 
         meta.setMontoActual(meta.getMontoActual() + monto);
-        if (meta.getMontoActual() >= meta.getMontoObjetivo()) meta.setActiva(false);
+        if (meta.getMontoActual() >= meta.getMontoObjetivo()) {
+            meta.setActiva(false);
+        } else {
+            meta.setActiva(true);
+        }
         return repository.save(meta);
     }
 

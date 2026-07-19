@@ -165,7 +165,7 @@ export class MetasComponent implements OnInit {
 
   aportar(meta: MetaAhorro) {
     const monto = this.mensajeAporte[meta.id!];
-    if (!monto || monto <= 0) return;
+    if (monto == null || monto === 0) return;
     this.service.aportar(meta.id!, monto).subscribe({
       next: () => {
         this.cargar();
