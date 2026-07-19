@@ -35,14 +35,6 @@ export class TransaccionService {
         return this.http.post(`${this.apiUrl}/verificar-riesgo`, data).pipe(catchError(this.handleError));
     }
 
-    listarProgramadas(usuarioId: number): Observable<Transaccion[]> {
-        return this.http.get<Transaccion[]>(`${this.apiUrl}/programadas/${usuarioId}`).pipe(catchError(this.handleError));
-    }
-
-    crearProgramada(data: Transaccion): Observable<Transaccion> {
-        return this.http.post<Transaccion>(`${this.apiUrl}/programadas`, data).pipe(catchError(this.handleError));
-    }
-
     eliminar(id: number): Observable<void> {
         return this.http.delete<void>(`${this.apiUrl}/${id}`)
             .pipe(catchError(this.handleError));

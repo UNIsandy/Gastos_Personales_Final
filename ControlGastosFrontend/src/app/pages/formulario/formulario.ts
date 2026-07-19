@@ -1,19 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TransaccionService } from '../../services/transaccion.service';
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
 import { switchMap } from 'rxjs/operators';
-
-function fechaNoFutura(control: AbstractControl): ValidationErrors | null {
-  if (!control.value) return null;
-  const seleccionada = new Date(control.value);
-  const hoy = new Date();
-  hoy.setHours(23, 59, 59, 999);
-  return seleccionada > hoy ? { fechaFutura: true } : null;
-}
 
 @Component({
   selector: 'app-formulario',
@@ -46,7 +38,7 @@ export class FormularioComponent implements OnInit {
       monto: [0, [Validators.required, Validators.min(0.01)]],
       tipo: ['GASTO', Validators.required],
       categoria: ['Alimentación', Validators.required],
-      fecha: [new Date().toISOString().split('T')[0], [Validators.required, fechaNoFutura]]
+      fecha: [new Date().toISOString().split('T')[0], Validators.required]
     });
 
     const idParam = this.route.snapshot.paramMap.get('id');

@@ -119,23 +119,6 @@ public class TransaccionController {
         return ResponseEntity.ok(Map.of("message", "Transacción eliminada correctamente"));
     }
 
-    // CREAR TRANSACCION PROGRAMADA
-    @PostMapping("/programadas")
-    public ResponseEntity<?> crearProgramada(@RequestBody Transaccion transaccion) {
-        try {
-            Transaccion nueva = transaccionService.crearProgramada(transaccion);
-            return ResponseEntity.status(201).body(nueva);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-        }
-    }
-
-    // LISTAR TRANSACCIONES PROGRAMADAS
-    @GetMapping("/programadas/{usuarioId}")
-    public ResponseEntity<List<Transaccion>> obtenerProgramadas(@PathVariable Long usuarioId) {
-        return ResponseEntity.ok(transaccionService.obtenerProgramadas(usuarioId));
-    }
-
     // VERIFICAR RIESGO ANTES DE CREAR TRANSACCION
     @PostMapping("/verificar-riesgo")
     public ResponseEntity<?> verificarRiesgo(@RequestBody Map<String, Object> body) {

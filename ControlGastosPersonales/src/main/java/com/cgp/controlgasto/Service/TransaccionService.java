@@ -89,36 +89,6 @@ public class TransaccionService {
     }
 
     @Transactional(readOnly = true)
-    public List<Transaccion> obtenerProgramadas(Long usuarioId) {
-        return transaccionRepository.findByUsuarioId(usuarioId).stream()
-            .filter(t -> t.getFecha().isAfter(LocalDate.now()))
-            .sorted((a, b) -> a.getFecha().compareTo(b.getFecha()))
-            .toList();
-    }
-
-    @Transactional
-    public Transaccion crearProgramada(Transaccion transaccion) {
-        if (transaccion == null) throw new RuntimeException("Transacción inválida");
-        if (transaccion.getDescripcion() == null || transaccion.getDescripcion().trim().isEmpty())
-            throw new RuntimeException("La descripción no puede estar vacía");
-        if (transaccion.getMonto() == null || transaccion.getMonto() <= 0)
-            throw new RuntimeException("El monto debe ser mayor que cero");
-        if (transaccion.getFecha() == null)
-            throw new RuntimeException("La fecha es obligatoria");
-        if (!transaccion.getFecha().isAfter(LocalDate.now()))
-            throw new RuntimeException("La fecha debe ser futura para transacciones programadas");
-        if (transaccion.getTipo() == null)
-            throw new RuntimeException("El tipo de transacción es obligatorio");
-
-        if (transaccion.getCategoria() != null && transaccion.getCategoria().getId() == null) {
-            Categoria cat = categoriaRepository.findByNombre(transaccion.getCategoria().getNombre())
-                .orElseGet(() -> categoriaRepository.save(new Categoria(transaccion.getCategoria().getNombre())));
-            transaccion.setCategoria(cat);
-        }
-        return transaccionRepository.save(transaccion);
-    }
-
-    @Transactional(readOnly = true)
     public List<Transaccion> obtenerPorCategoria(Long categoriaId) {
         return transaccionRepository.findByCategoriaId(categoriaId);
     }
@@ -244,9 +214,6 @@ public class TransaccionService {
         }
         if (transaccion.getFecha() == null) {
             throw new RuntimeException("La fecha es obligatoria");
-        }
-        if (transaccion.getFecha().isAfter(LocalDate.now())) {
-            throw new RuntimeException("La fecha no puede ser futura");
         }
         if (transaccion.getTipo() == null) {
             throw new RuntimeException("El tipo de transacción es obligatorio");
