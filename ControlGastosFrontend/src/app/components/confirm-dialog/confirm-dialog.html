@@ -1,0 +1,16 @@
+@if (notificaciones.confirmRequest(); as solicitud) {
+    <div class="confirm-overlay" (click)="cancelar()">
+        <div class="confirm-dialog" [class.confirm-dialog--peligroso]="solicitud.peligroso" (click)="$event.stopPropagation()">
+            <h2 class="confirm-dialog__titulo">{{ solicitud.titulo }}</h2>
+            <p class="confirm-dialog__mensaje">{{ solicitud.mensaje }}</p>
+            <div class="confirm-dialog__acciones">
+                <button type="button" class="confirm-dialog__btn confirm-dialog__btn--cancelar" (click)="cancelar()">
+                    {{ solicitud.textoCancelar }}
+                </button>
+                <button type="button" class="confirm-dialog__btn confirm-dialog__btn--confirmar" (click)="confirmar()">
+                    {{ solicitud.textoConfirmar }}
+                </button>
+            </div>
+        </div>
+    </div>
+}

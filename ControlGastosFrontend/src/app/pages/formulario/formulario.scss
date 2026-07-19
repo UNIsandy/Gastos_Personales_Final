@@ -1,0 +1,168 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.formulario {
+    max-width: 820px;
+    margin: 0 auto;
+
+    &__eyebrow {
+        color: $color-primary;
+        font-size: $font-size-xs;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+
+    &__title {
+        font-size: $font-size-xxl;
+        font-weight: 800;
+        color: $color-text;
+        margin-bottom: $spacing-lg;
+    }
+
+    &__form {
+        @include card;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: $spacing-md;
+        border-color: rgba(34, 211, 238, 0.16);
+    }
+
+    &__campo {
+        min-width: 0;
+
+        &--full {
+            grid-column: 1 / -1;
+        }
+    }
+
+    &__label {
+        display: block;
+        font-size: $font-size-sm;
+        font-weight: 700;
+        color: $color-text-light;
+        margin-bottom: $spacing-xs;
+    }
+
+    &__input,
+    &__select {
+        @include input;
+
+        &--invalid {
+            border-color: $color-gasto;
+            background: rgba($color-gasto, 0.08);
+        }
+    }
+
+    &__error,
+    &__error-msg {
+        color: $color-gasto;
+        font-size: $font-size-xs;
+        font-weight: 650;
+    }
+
+    &__error {
+        display: block;
+        margin-top: $spacing-xs;
+    }
+
+    &__error-msg {
+        background: $color-gasto-light;
+        padding: $spacing-sm $spacing-md;
+        border-radius: $border-radius-md;
+        margin-bottom: $spacing-md;
+        border: 1px solid rgba($color-gasto, 0.26);
+    }
+
+    &__acciones {
+        display: flex;
+        gap: $spacing-md;
+        margin-top: $spacing-sm;
+        grid-column: 1 / -1;
+    }
+
+    &__btn-guardar {
+        @include btn-primary;
+    }
+
+    &__btn-cancelar {
+        @include btn-base;
+        background: rgba(255, 255, 255, 0.06);
+        color: $color-text;
+        text-decoration: none;
+        border: 1px solid $color-border;
+    }
+
+    &__btn-guardar:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    &__file-wrapper {
+        position: relative;
+
+        .formulario__file-input {
+            display: none;
+        }
+
+        .formulario__file-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            width: 100%;
+            padding: $spacing-sm $spacing-md;
+            background: rgba(34, 211, 238, 0.08);
+            border: 1px dashed rgba(34, 211, 238, 0.36);
+            border-radius: $border-radius-md;
+            cursor: pointer;
+            color: $color-text;
+            transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: $shadow-sm;
+                border-color: rgba(34, 211, 238, 0.62);
+            }
+        }
+
+        .formulario__preview {
+            position: relative;
+            display: inline-block;
+            margin-top: $spacing-sm;
+
+            img {
+                max-height: 128px;
+                border-radius: $border-radius-md;
+                border: 1px solid $color-border;
+            }
+
+            .formulario__remove-file {
+                position: absolute;
+                top: -8px;
+                right: -8px;
+                width: 26px;
+                height: 26px;
+                border-radius: 50%;
+                border: none;
+                background: $color-gasto;
+                color: $color-white;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    }
+
+    @include respond-to('md') {
+        &__form {
+            grid-template-columns: 1fr;
+        }
+
+        &__acciones {
+            flex-direction: column;
+        }
+    }
+}

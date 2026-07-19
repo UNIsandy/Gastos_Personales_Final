@@ -1,0 +1,19 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.footer {
+    background: rgba(9, 16, 29, 0.72);
+    color: $color-text-muted;
+    text-align: center;
+    padding: $spacing-md;
+    margin-left: $sidebar-width;
+    border-top: 1px solid rgba(151, 188, 226, 0.12);
+
+    &__text {
+        font-size: $font-size-sm;
+    }
+
+    @include respond-to('md') {
+        margin-left: 0;
+    }
+}

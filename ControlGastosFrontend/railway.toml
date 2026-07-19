@@ -1,0 +1,3 @@
+[build]
+  dockerfile = "Dockerfile"
+  buildArgs = { API_BACKEND_URL = "$API_BACKEND_URL" }

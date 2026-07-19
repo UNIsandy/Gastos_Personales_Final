@@ -1,0 +1,111 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: $spacing-lg;
+    background:
+        radial-gradient(circle at 18% 12%, rgba(34, 211, 238, 0.2), transparent 26%),
+        radial-gradient(circle at 82% 20%, rgba(139, 92, 246, 0.2), transparent 28%),
+        $gradient-page;
+
+    &__card {
+        @include card;
+        width: 100%;
+        max-width: 430px;
+        padding: $spacing-xl;
+        text-align: center;
+        border-color: rgba(34, 211, 238, 0.22);
+    }
+
+    &__logo {
+        width: 54px;
+        height: 54px;
+        display: grid;
+        place-items: center;
+        margin: 0 auto $spacing-md;
+        border-radius: $border-radius-md;
+        color: #102033;
+        background: linear-gradient(135deg, $accent-3, #fef3c7);
+        font-weight: 900;
+        font-size: $font-size-xl;
+        box-shadow: 0 0 28px rgba(251, 191, 36, 0.34);
+    }
+
+    &__title {
+        font-size: 1.9rem;
+        color: $color-text;
+        margin-bottom: $spacing-xs;
+        font-weight: 850;
+    }
+
+    &__subtitle {
+        color: $color-text-light;
+        margin-bottom: $spacing-lg;
+    }
+
+    &__error,
+    &__exito {
+        padding: $spacing-sm $spacing-md;
+        border-radius: $border-radius-md;
+        margin-bottom: $spacing-md;
+        font-size: $font-size-sm;
+        font-weight: 650;
+        border: 1px solid;
+    }
+
+    &__error {
+        background: $color-gasto-light;
+        color: $color-gasto;
+        border-color: rgba($color-gasto, 0.3);
+    }
+
+    &__exito {
+        background: $color-ingreso-light;
+        color: $color-ingreso;
+        border-color: rgba($color-ingreso, 0.3);
+    }
+
+    &__campo {
+        margin-bottom: $spacing-md;
+        text-align: left;
+
+        label {
+            display: block;
+            font-size: $font-size-sm;
+            font-weight: 700;
+            margin-bottom: $spacing-xs;
+            color: $color-text-light;
+        }
+
+        input {
+            @include input;
+        }
+    }
+
+    &__btn {
+        @include btn-primary;
+        width: 100%;
+        margin-top: $spacing-md;
+        padding: $spacing-md;
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    }
+
+    &__link {
+        margin-top: $spacing-md;
+        font-size: $font-size-sm;
+        color: $color-text-light;
+
+        a {
+            color: $color-primary;
+            font-weight: 750;
+        }
+    }
+}

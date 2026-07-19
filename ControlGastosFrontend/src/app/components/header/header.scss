@@ -1,0 +1,62 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: $header-height;
+    background: rgba(9, 16, 29, 0.88);
+    color: $color-white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 $spacing-lg;
+    z-index: 1000;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.28);
+    border-bottom: 1px solid rgba(151, 188, 226, 0.14);
+    backdrop-filter: blur(18px);
+
+    &__brand,
+    &__user {
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+    }
+
+    &__logo,
+    &__user-avatar {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        font-weight: 800;
+    }
+
+    &__logo {
+        color: #102033;
+        background: linear-gradient(135deg, $accent-3, #fef3c7);
+        box-shadow: 0 0 22px rgba(251, 191, 36, 0.35);
+    }
+
+    &__title {
+        font-size: $font-size-lg;
+        font-weight: 750;
+        color: rgba($color-white, 0.94);
+        letter-spacing: 0;
+    }
+
+    &__user-name {
+        font-weight: 600;
+        color: $color-text-light;
+    }
+
+    &__user-avatar {
+        border-radius: 50%;
+        color: $color-white;
+        background: linear-gradient(135deg, $accent-1, $color-primary);
+        box-shadow: 0 0 22px rgba(34, 211, 238, 0.28);
+    }
+}

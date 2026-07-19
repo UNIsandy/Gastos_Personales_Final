@@ -1,0 +1,101 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.lista {
+    max-width: 980px;
+    margin: 0 auto;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: $spacing-md;
+        margin-bottom: $spacing-lg;
+    }
+
+    &__eyebrow {
+        color: $color-primary;
+        font-size: $font-size-xs;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+
+    &__title {
+        font-size: $font-size-xxl;
+        font-weight: 800;
+        color: $color-text;
+    }
+
+    &__actions,
+    &__toolbar {
+        display: flex;
+        gap: $spacing-sm;
+        align-items: center;
+    }
+
+    &__btn-nueva {
+        @include btn-primary;
+        text-decoration: none;
+    }
+
+    &__btn-pdf {
+        @include btn-base;
+        background: rgba($color-gasto, 0.12);
+        color: $color-gasto;
+        border: 1px solid rgba($color-gasto, 0.34);
+    }
+
+    &__toolbar {
+        @include card;
+        justify-content: flex-start;
+        margin-bottom: $spacing-lg;
+        padding: $spacing-md;
+    }
+
+    &__filter-label {
+        color: $color-text-light;
+        font-size: $font-size-sm;
+        font-weight: 700;
+    }
+
+    &__select {
+        @include input;
+        max-width: 220px;
+    }
+
+    &__grid {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-sm;
+    }
+
+    &__item {
+        position: relative;
+    }
+
+    &__comprobante-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 0.7rem;
+        background: rgba($color-ingreso, 0.14);
+        color: $color-ingreso;
+        padding: 3px 9px;
+        border-radius: 999px;
+        font-weight: 700;
+        border: 1px solid rgba($color-ingreso, 0.26);
+    }
+
+    @include respond-to('sm') {
+        &__header,
+        &__actions,
+        &__toolbar {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        &__select {
+            max-width: none;
+        }
+    }
+}

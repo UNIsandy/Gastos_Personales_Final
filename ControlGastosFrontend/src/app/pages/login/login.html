@@ -1,0 +1,27 @@
+<div class="login">
+    <div class="login__card">
+        <span class="login__logo">$</span>
+        <h1 class="login__title">ControlGastos</h1>
+        <p class="login__subtitle">Inicia sesión para continuar</p>
+
+        @if (error) {
+            <div class="login__error">{{ error }}</div>
+        }
+
+        <form (ngSubmit)="ingresar()">
+            <div class="login__campo">
+                <label>Email</label>
+                <input type="email" [(ngModel)]="email" name="email" required placeholder="tu@email.com">
+            </div>
+            <div class="login__campo">
+                <label>Contraseña</label>
+                <input type="password" [(ngModel)]="password" name="password" required placeholder="••••••">
+            </div>
+            <button type="submit" class="login__btn" [disabled]="cargando">
+                {{ cargando ? 'Ingresando...' : 'Ingresar' }}
+            </button>
+        </form>
+
+        <p class="login__link">¿No tienes cuenta? <a routerLink="/registro">Regístrate aquí</a></p>
+    </div>
+</div>

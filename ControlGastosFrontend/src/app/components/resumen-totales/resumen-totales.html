@@ -1,0 +1,23 @@
+<div class="resumen-totales">
+    <div class="resumen-totales__card resumen-totales__card--ingreso">
+        <span class="resumen-totales__icon">$</span>
+        <div class="resumen-totales__info">
+            <span class="resumen-totales__label">Ingresos</span>
+            <span class="resumen-totales__valor">+ {{ ingresos | number:'1.2-2' }}</span>
+        </div>
+    </div>
+    <div class="resumen-totales__card resumen-totales__card--gasto">
+        <span class="resumen-totales__icon">-</span>
+        <div class="resumen-totales__info">
+            <span class="resumen-totales__label">Gastos</span>
+            <span class="resumen-totales__valor">- {{ gastos | number:'1.2-2' }}</span>
+        </div>
+    </div>
+    <div class="resumen-totales__card" [class.resumen-totales__card--positivo]="balance >= 0" [class.resumen-totales__card--negativo]="balance < 0">
+        <span class="resumen-totales__icon">{{ balance >= 0 ? '✓' : '!' }}</span>
+        <div class="resumen-totales__info">
+            <span class="resumen-totales__label">Balance Total</span>
+            <span class="resumen-totales__valor">{{ balance >= 0 ? '+' : '' }}{{ balance | number:'1.2-2' }}</span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+<div class="tarjeta-gasto" [class.tarjeta-gasto--ingreso]="tipo === 'INGRESO'" [class.tarjeta-gasto--gasto]="tipo === 'GASTO'">
+    <div class="tarjeta-gasto__header">
+        <span class="tarjeta-gasto__tipo">{{ tipo === 'INGRESO' ? '+' : '-' }} {{ tipo }}</span>
+        <span class="tarjeta-gasto__monto" [class.tarjeta-gasto__monto--ingreso]="tipo === 'INGRESO'" [class.tarjeta-gasto__monto--gasto]="tipo === 'GASTO'">
+            {{ tipo === 'INGRESO' ? '+' : '-' }}{{ monto | number:'1.2-2' }}
+        </span>
+    </div>
+    <div class="tarjeta-gasto__body">
+        <h3 class="tarjeta-gasto__descripcion">{{ descripcion }}</h3>
+        <p class="tarjeta-gasto__categoria">{{ categoria }}</p>
+    </div>
+    <div class="tarjeta-gasto__footer">
+        <span class="tarjeta-gasto__fecha">{{ fecha }}</span>
+        <div class="tarjeta-gasto__acciones">
+            <a class="tarjeta-gasto__btn-editar" routerLink="/formulario/{{ id }}">Editar</a>
+            <button class="tarjeta-gasto__btn-eliminar" (click)="onEliminar()">Eliminar</button>
+        </div>
+    </div>
+</div>

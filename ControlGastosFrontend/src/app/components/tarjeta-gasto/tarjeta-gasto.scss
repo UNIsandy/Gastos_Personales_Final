@@ -1,0 +1,113 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.tarjeta-gasto {
+    @include card;
+    border-left: 4px solid $color-border;
+    margin-bottom: $spacing-md;
+    padding: $spacing-md;
+
+    &--ingreso {
+        border-left-color: $color-ingreso;
+    }
+
+    &--gasto {
+        border-left-color: $color-gasto;
+    }
+
+    &__header,
+    &__footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: $spacing-md;
+    }
+
+    &__header {
+        margin-bottom: $spacing-sm;
+    }
+
+    &__tipo {
+        @include tipo-badge(rgba(255, 255, 255, 0.08), $color-text-light);
+    }
+
+    &__monto {
+        font-size: $font-size-xl;
+        font-weight: 800;
+        white-space: nowrap;
+
+        &--ingreso {
+            color: $color-ingreso;
+            text-shadow: 0 0 14px rgba($color-ingreso, 0.4);
+        }
+
+        &--gasto {
+            color: $color-gasto;
+            text-shadow: 0 0 14px rgba($color-gasto, 0.36);
+        }
+    }
+
+    &__body {
+        margin-bottom: $spacing-sm;
+    }
+
+    &__descripcion {
+        font-size: $font-size-md;
+        font-weight: 650;
+        color: $color-text;
+    }
+
+    &__categoria,
+    &__fecha {
+        color: $color-text-muted;
+    }
+
+    &__categoria {
+        font-size: $font-size-sm;
+        margin-top: $spacing-xs;
+    }
+
+    &__fecha {
+        font-size: $font-size-xs;
+    }
+
+    &__acciones {
+        display: flex;
+        gap: $spacing-sm;
+    }
+
+    &__btn-editar,
+    &__btn-eliminar {
+        @include btn-small;
+        background: transparent;
+        text-decoration: none;
+    }
+
+    &__btn-editar {
+        color: $color-primary;
+        border: 1px solid rgba($color-primary, 0.45);
+
+        &:hover {
+            background: rgba($color-primary, 0.12);
+            color: $color-white;
+        }
+    }
+
+    &__btn-eliminar {
+        color: $color-gasto;
+        border: 1px solid rgba($color-gasto, 0.45);
+
+        &:hover {
+            background: rgba($color-gasto, 0.14);
+            color: $color-white;
+        }
+    }
+
+    @include respond-to('sm') {
+        &__header,
+        &__footer {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+    }
+}

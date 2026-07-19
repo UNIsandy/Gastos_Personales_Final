@@ -1,0 +1,40 @@
+<div class="lista">
+    <div class="lista__header">
+        <div>
+            <span class="lista__eyebrow">Historial</span>
+            <h2 class="lista__title">Transacciones</h2>
+        </div>
+        <div class="lista__actions">
+            <button class="lista__btn-pdf" (click)="descargarPDF()">PDF</button>
+            <a routerLink="/formulario" class="lista__btn-nueva">+ Nueva</a>
+        </div>
+    </div>
+
+    <div class="lista__toolbar">
+        <label class="lista__filter-label" for="filtroTipo">Tipo</label>
+        <select id="filtroTipo" class="lista__select" [(ngModel)]="filtroTipo">
+            <option value="">Todas</option>
+            <option value="INGRESO">Ingresos</option>
+            <option value="GASTO">Gastos</option>
+        </select>
+    </div>
+
+    <div class="lista__grid">
+        @for (t of transaccionesFiltradas; track t.id) {
+            <div class="lista__item">
+                <app-tarjeta-gasto
+                    [id]="t.id!"
+                    [tipo]="t.tipo"
+                    [monto]="t.monto"
+                    [descripcion]="t.descripcion"
+                    [categoria]="t.categoria?.nombre || ''"
+                    [fecha]="t.fecha"
+                    (eliminar)="onEliminar($event)">
+                </app-tarjeta-gasto>
+                @if (t.rutaComprobante) {
+                    <span class="lista__comprobante-badge">Con comprobante</span>
+                }
+            </div>
+        }
+    </div>
+</div>

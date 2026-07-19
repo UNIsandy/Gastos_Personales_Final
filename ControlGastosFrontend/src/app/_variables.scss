@@ -1,0 +1,72 @@
+// Colores principales
+$primary: #22d3ee;
+$color-primary: #22d3ee;
+$color-primary-dark: #0f172a;
+$color-primary-light: #dffbff;
+
+$accent-1: #8b5cf6;
+$accent-2: #f472b6;
+$accent-3: #fbbf24;
+
+$color-ingreso: #63f09b;
+$color-ingreso-light: rgba(99, 240, 155, 0.14);
+$color-ingreso-bg: rgba(99, 240, 155, 0.2);
+
+$color-gasto: #ff7777;
+$color-gasto-light: rgba(255, 119, 119, 0.14);
+$color-gasto-bg: rgba(255, 119, 119, 0.2);
+
+$color-text: #edf7ff;
+$color-text-light: #b7c7d8;
+$color-text-muted: #7f93aa;
+
+$color-bg: #08111f;
+$color-bg-dark: #0c1a2e;
+$color-surface: rgba(15, 25, 43, 0.82);
+$color-surface-strong: rgba(23, 34, 56, 0.94);
+$color-white: #ffffff;
+$color-border: rgba(151, 188, 226, 0.18);
+$color-shadow: rgba(0, 0, 0, 0.34);
+
+// Tipografía
+$font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-md: 16px;
+$font-size-lg: 18px;
+$font-size-xl: 22px;
+$font-size-xxl: 28px;
+
+// Espaciado
+$spacing-xs: 6px;
+$spacing-sm: 10px;
+$spacing-md: 18px;
+$spacing-lg: 26px;
+$spacing-xl: 36px;
+$spacing-xxl: 56px;
+
+// Estados
+$warning: #f59e0b;
+
+// Bordes
+$border-radius-sm: 6px;
+$border-radius-md: 10px;
+$border-radius-lg: 12px;
+$border-radius-xl: 16px;
+
+// Sombras
+$shadow-sm: 0 10px 28px $color-shadow;
+$shadow-md: 0 18px 46px $color-shadow;
+$shadow-lg: 0 28px 70px $color-shadow;
+
+// Layout
+$sidebar-width: 260px;
+$header-height: 64px;
+$content-max-width: 1200px;
+
+// Gradientes
+$gradient-accent: linear-gradient(135deg, #2dd4bf 0%, #38bdf8 45%, #8b5cf6 100%);
+$gradient-panel: linear-gradient(145deg, rgba(30, 41, 68, 0.92), rgba(9, 18, 32, 0.86));
+$gradient-page: radial-gradient(circle at 12% 0%, rgba(45, 212, 191, 0.14), transparent 26%),
+    radial-gradient(circle at 86% 12%, rgba(139, 92, 246, 0.16), transparent 24%),
+    linear-gradient(135deg, #08111f 0%, #0d1728 48%, #101827 100%);

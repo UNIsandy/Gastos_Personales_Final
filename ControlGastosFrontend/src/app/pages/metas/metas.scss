@@ -1,0 +1,323 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.metas-page {
+    max-width: 1180px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: $spacing-md;
+    margin-bottom: $spacing-lg;
+
+    h1 {
+        color: $color-text;
+        font-size: $font-size-xxl;
+        font-weight: 800;
+    }
+
+    &__eyebrow {
+        color: $color-primary;
+        font-size: $font-size-xs;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+}
+
+.btn-primary {
+    @include btn-primary;
+}
+
+.nivel-global {
+    @include tarjeta;
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-lg;
+}
+
+.nivel-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-sm $spacing-md;
+    border-radius: 999px;
+    font-weight: 800;
+    border: 1px solid;
+
+    &.bronce {
+        background: rgba(251, 191, 36, 0.14);
+        color: $accent-3;
+        border-color: rgba(251, 191, 36, 0.32);
+    }
+
+    &.plata {
+        background: rgba(226, 232, 240, 0.12);
+        color: #dbeafe;
+        border-color: rgba(226, 232, 240, 0.24);
+    }
+
+    &.oro {
+        background: rgba(34, 211, 238, 0.14);
+        color: $color-primary;
+        border-color: rgba(34, 211, 238, 0.34);
+    }
+
+    &.pequeno {
+        font-size: $font-size-xs;
+        padding: 3px 10px;
+    }
+}
+
+.progreso-global {
+    flex: 1;
+
+    .label {
+        font-size: $font-size-sm;
+        color: $color-text-light;
+        margin-bottom: $spacing-xs;
+        display: block;
+        font-weight: 700;
+    }
+}
+
+.barra,
+.barra-progreso {
+    height: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    overflow: hidden;
+
+    .fill {
+        height: 100%;
+        background: $gradient-accent;
+        border-radius: inherit;
+        transition: width 0.5s ease;
+        box-shadow: 0 0 18px rgba(34, 211, 238, 0.35);
+
+        &.bronce { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        &.plata { background: linear-gradient(90deg, #94a3b8, #e2e8f0); }
+        &.oro { background: linear-gradient(90deg, #22d3ee, #8b5cf6); }
+    }
+}
+
+.form-meta {
+    @include tarjeta;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: $spacing-md;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-lg;
+
+    .btn-primary {
+        align-self: end;
+        min-height: 42px;
+    }
+
+    &__campo {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xs;
+        min-width: 0;
+    }
+
+    &__input {
+        @include input;
+
+        &--invalid {
+            border-color: $color-gasto;
+            box-shadow: 0 0 0 3px rgba($color-gasto, 0.14), 0 10px 30px rgba($color-gasto, 0.08);
+        }
+    }
+
+    &__error {
+        font-size: $font-size-xs;
+        color: $color-gasto;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+}
+
+.filtro-tabs {
+    display: flex;
+    gap: $spacing-xs;
+    margin-bottom: $spacing-lg;
+}
+
+.tab {
+    @include btn-base;
+    background: rgba(255, 255, 255, 0.04);
+    color: $color-text-light;
+    border: 1px solid $color-border;
+    flex: 1;
+
+    &--activo {
+        background: rgba($color-primary, 0.1);
+        color: $color-primary;
+        border-color: rgba($color-primary, 0.34);
+        box-shadow: 0 0 20px rgba($color-primary, 0.1);
+    }
+}
+
+.sin-metas {
+    @include card;
+    text-align: center;
+    padding: $spacing-xl;
+    margin-bottom: $spacing-lg;
+
+    p {
+        color: $color-text-light;
+        font-size: $font-size-md;
+        margin: 0;
+    }
+}
+
+.metas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: $spacing-md;
+}
+
+.meta-card {
+    @include tarjeta;
+    padding: $spacing-lg;
+
+    &.completada {
+        opacity: 0.78;
+    }
+
+    .meta-header,
+    .meta-footer,
+    .meta-acciones {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: $spacing-sm;
+    }
+
+    .meta-header {
+        margin-bottom: $spacing-md;
+
+        h3 {
+            color: $color-text;
+            font-size: $font-size-md;
+            font-weight: 800;
+            overflow-wrap: anywhere;
+        }
+    }
+
+    .montos {
+        font-size: $font-size-lg;
+        font-weight: 800;
+        margin-bottom: $spacing-sm;
+        color: $color-text;
+    }
+
+    .barra-progreso {
+        height: 9px;
+        margin-bottom: $spacing-md;
+    }
+
+    .meta-footer {
+        margin-bottom: $spacing-sm;
+
+        .fecha {
+            font-size: $font-size-xs;
+            color: $color-text-muted;
+        }
+
+        .badge {
+            font-size: $font-size-xs;
+            padding: 3px 9px;
+            border-radius: 999px;
+            font-weight: 700;
+
+            &.activa {
+                background: rgba($color-primary, 0.12);
+                color: $color-primary;
+            }
+
+            &.completada {
+                background: rgba($color-ingreso, 0.14);
+                color: $color-ingreso;
+            }
+        }
+    }
+
+    .aporte {
+        display: flex;
+        gap: $spacing-xs;
+        flex: 1;
+
+        input {
+            @include input;
+            font-size: $font-size-sm;
+        }
+    }
+}
+
+.btn-small,
+.btn-editar {
+    @include btn-small;
+}
+
+.btn-small {
+    background: rgba($color-primary, 0.12);
+    color: $color-primary;
+    border: 1px solid rgba($color-primary, 0.34);
+}
+
+.btn-editar {
+    background: rgba(255, 255, 255, 0.06);
+    color: $color-text;
+    border: 1px solid $color-border;
+}
+
+.btn-eliminar {
+    @include btn-small;
+    background: transparent;
+    color: $color-gasto;
+    border: 1px solid rgba($color-gasto, 0.45);
+
+    &:hover {
+        background: rgba($color-gasto, 0.14);
+        color: $color-white;
+    }
+}
+
+.form-editar {
+    grid-template-columns: 1fr;
+    gap: $spacing-sm;
+    margin-top: $spacing-lg;
+
+    h3 {
+        margin: 0 0 $spacing-xs;
+        color: $color-text;
+    }
+}
+
+.form-acciones {
+    display: flex;
+    gap: $spacing-sm;
+}
+
+.btn-cancelar {
+    @include btn-small;
+    background: transparent;
+    color: $color-text-light;
+    border: 1px solid $color-border;
+}
+
+@include respond-to('md') {
+    .header,
+    .nivel-global,
+    .meta-card .meta-acciones,
+    .form-acciones {
+        align-items: stretch;
+        flex-direction: column;
+    }
+}

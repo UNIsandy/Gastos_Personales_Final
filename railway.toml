@@ -1,0 +1,10 @@
+[project]
+  name = "control-gastos"
+
+[[service]]
+  name = "backend"
+  root = "ControlGastosPersonales"
+
+[[service]]
+  name = "frontend"
+  root = "ControlGastosFrontend"

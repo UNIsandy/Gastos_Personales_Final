@@ -1,0 +1,129 @@
+<div class="dashboard">
+  <div class="dashboard__header">
+    <span class="dashboard__eyebrow">Resumen</span>
+    <h1>Dashboard Financiero</h1>
+  </div>
+
+  @if (cargando) { <p class="dashboard__loading">Cargando...</p> }
+  @if (error) { <div class="dashboard__error">{{ error }}</div> }
+
+  @if (alertas.length > 0) {
+    <section class="dashboard__alertas">
+      @for (a of alertas; track a) {
+        <div class="alerta alerta--{{ a.tipo }}">{{ a.mensaje }}</div>
+      }
+    </section>
+  }
+
+  @if (data) {
+    <section class="dashboard__cards">
+      <div class="card card--ingreso">
+        <span class="card__label">Ingresos</span>
+        <span class="card__valor">S/ {{ data.totalIngresos.toFixed(2) }}</span>
+      </div>
+      <div class="card card--gasto">
+        <span class="card__label">Gastos</span>
+        <span class="card__valor">S/ {{ data.totalGastos.toFixed(2) }}</span>
+      </div>
+      <div class="card" [class.card--positivo]="data.balance >= 0" [class.card--negativo]="data.balance < 0">
+        <span class="card__label">Balance</span>
+        <span class="card__valor">{{ data.balance >= 0 ? '+' : '' }}S/ {{ data.balance.toFixed(2) }}</span>
+      </div>
+      <div class="card card--prediccion">
+        <span class="card__label">{{ data.tendencia }} Pronóstico próximo mes</span>
+        <span class="card__valor">S/ {{ data.prediccionProximoMes.toFixed(2) }}</span>
+      </div>
+    </section>
+
+    <section class="dashboard__charts">
+      <div class="chart-box">
+        <h3>Gastos por Categoría</h3>
+        <canvas #pieCanvas></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Comparación por Categoría</h3>
+        <canvas #barCanvas></canvas>
+      </div>
+      <div class="chart-box chart-box--full">
+        <h3>Evolución Mensual</h3>
+        <canvas #lineCanvas></canvas>
+      </div>
+    </section>
+
+    <section class="dashboard__prediccion-detalle">
+      <h3>Análisis Predictivo</h3>
+      <div class="pred-grid">
+        <div class="pred-item">
+          <span class="pred-label">Gastado este mes</span>
+          <span class="pred-valor">S/ {{ data.gastoMesActual.toFixed(2) }}</span>
+        </div>
+        <div class="pred-item">
+          <span class="pred-label">Pronóstico próximo mes</span>
+          <span class="pred-valor">S/ {{ data.prediccionProximoMes.toFixed(2) }}</span>
+        </div>
+        <div class="pred-item">
+          <span class="pred-label">Tendencia</span>
+          <span class="pred-valor pred-tendencia">{{ data.tendencia }}
+            @if (data.tendencia === '✅') { Todo estable }
+            @else if (data.tendencia === '🔥') { Gastando más de lo previsto }
+            @else { Cuidado, se espera aumento }
+          </span>
+        </div>
+      </div>
+    </section>
+  }
+
+  @if (data?.consejos?.length) {
+  <section class="dashboard__consejos">
+      <h3>💡 Recomendaciones Personalizadas</h3>
+      <div class="consejos-grid">
+          @for (c of data!.consejos; track c.titulo) {
+            <div class="consejo consejo--{{c.tipo}}">
+              <div class="consejo__header">
+                <div class="consejo__titulo">
+                    <span class="consejo__icono">
+                        {{ c.icono }}
+                    </span>
+                    <div>
+                        <h4>{{ c.titulo }}</h4>
+                        <small>
+                            @if(c.prioridad == 1){
+                                Alta prioridad
+                            }
+                            @else if(c.prioridad == 2){
+                                Recomendación
+                            }
+                            @else{
+                                Información
+                            }
+                        </small>
+                    </div>
+                </div>
+                @if(c.tipo == 'success'){
+                    <span class="badge badge-success">
+                        Excelente
+                    </span>
+                }
+                @else if(c.tipo == 'warning'){
+                    <span class="badge badge-warning">
+                        Atención
+                    </span>
+                }
+                @else if(c.tipo == 'danger'){
+                    <span class="badge badge-danger">
+                        Urgente
+                    </span>
+                }
+                @else{
+                    <span class="badge badge-info">
+                        Consejo
+                    </span>
+                }
+              </div>
+            <p>{{ c.descripcion }}</p>
+          </div>
+        }
+      </div>
+  </section>
+  }
+</div>

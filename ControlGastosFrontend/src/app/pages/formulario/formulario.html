@@ -1,0 +1,90 @@
+<div class="formulario">
+    <span class="formulario__eyebrow">Movimiento</span>
+    <h2 class="formulario__title">{{ esEdicion ? 'Editar Transacción' : 'Nueva Transacción' }}</h2>
+
+    @if (error) {
+        <div class="formulario__error-msg">{{ error }}</div>
+    }
+
+    <form class="formulario__form" [formGroup]="formulario" (ngSubmit)="guardar()">
+        <div class="formulario__campo">
+            <label class="formulario__label">Descripción</label>
+            <input class="formulario__input" type="text" formControlName="descripcion"
+                   [class.formulario__input--invalid]="campoDescripcion?.invalid && campoDescripcion?.touched"
+                   placeholder="Ej: Supermercado">
+            @if (campoDescripcion?.invalid && campoDescripcion?.touched) {
+                <span class="formulario__error">
+                    @if (campoDescripcion?.errors?.['required']) { La descripción es obligatoria }
+                    @if (campoDescripcion?.errors?.['minlength']) { Mínimo 3 caracteres }
+                </span>
+            }
+        </div>
+
+        <div class="formulario__campo">
+            <label class="formulario__label">Monto</label>
+            <input class="formulario__input" type="number" formControlName="monto" step="0.01"
+                   [class.formulario__input--invalid]="campoMonto?.invalid && campoMonto?.touched"
+                   placeholder="Ej: 50.00">
+            @if (campoMonto?.invalid && campoMonto?.touched) {
+                <span class="formulario__error">
+                    @if (campoMonto?.errors?.['required']) { El monto es obligatorio }
+                    @if (campoMonto?.errors?.['min']) { El monto debe ser mayor a 0 }
+                </span>
+            }
+        </div>
+
+        <div class="formulario__campo">
+            <label class="formulario__label">Tipo</label>
+            <select class="formulario__select" formControlName="tipo">
+                <option value="GASTO">Gasto</option>
+                <option value="INGRESO">Ingreso</option>
+            </select>
+        </div>
+
+        <div class="formulario__campo">
+            <label class="formulario__label">Categoría</label>
+            <select class="formulario__select" formControlName="categoria"
+                    [class.formulario__select--invalid]="campoCategoria?.invalid && campoCategoria?.touched">
+                <option value="Alimentación">Alimentación</option>
+                <option value="Transporte">Transporte</option>
+                <option value="Entretenimiento">Entretenimiento</option>
+                <option value="Trabajo">Trabajo</option>
+                <option value="Salud">Salud</option>
+                <option value="Otros">Otros</option>
+            </select>
+            @if (campoCategoria?.invalid && campoCategoria?.touched) {
+                <span class="formulario__error">La categoría es obligatoria</span>
+            }
+        </div>
+
+        <div class="formulario__campo">
+            <label class="formulario__label">Fecha</label>
+            <input class="formulario__input" type="date" formControlName="fecha"
+                   [class.formulario__input--invalid]="campoFecha?.invalid && campoFecha?.touched">
+            @if (campoFecha?.invalid && campoFecha?.touched) {
+                <span class="formulario__error">La fecha es obligatoria</span>
+            }
+        </div>
+
+        <div class="formulario__campo formulario__campo--full">
+            <label class="formulario__label">Comprobante (opcional)</label>
+            <div class="formulario__file-wrapper">
+                <input type="file" accept="image/*,.pdf" (change)="onFileSelected($event)" class="formulario__file-input" id="fileInput">
+                <label for="fileInput" class="formulario__file-label">
+                    {{ selectedFile ? selectedFile.name : 'Seleccionar archivo' }}
+                </label>
+                @if (previewUrl) {
+                    <div class="formulario__preview">
+                        <img [src]="previewUrl" alt="Vista previa" />
+                        <button type="button" class="formulario__remove-file" (click)="removerArchivo()">x</button>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="formulario__acciones">
+            <button type="submit" class="formulario__btn-guardar" [disabled]="formulario.invalid">Guardar</button>
+            <a routerLink="/lista" class="formulario__btn-cancelar">Cancelar</a>
+        </div>
+    </form>
+</div>

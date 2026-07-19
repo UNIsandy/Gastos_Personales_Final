@@ -1,0 +1,105 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.toast-container {
+    position: fixed;
+    top: $spacing-lg;
+    right: $spacing-lg;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    max-width: 380px;
+
+    @include respond-to('sm') {
+        left: $spacing-sm;
+        right: $spacing-sm;
+        top: $spacing-sm;
+        max-width: none;
+    }
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    background: $gradient-panel;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-md;
+    box-shadow: $shadow-md;
+    backdrop-filter: blur(18px);
+    padding: $spacing-sm $spacing-md;
+    color: $color-text;
+    font-size: $font-size-sm;
+    font-weight: 600;
+    animation: toast-in 0.22s ease;
+
+    &__icono {
+        display: grid;
+        place-items: center;
+        width: 22px;
+        height: 22px;
+        min-width: 22px;
+        border-radius: $border-radius-sm;
+        font-size: $font-size-xs;
+        font-weight: 900;
+    }
+
+    &__mensaje {
+        flex: 1;
+        line-height: 1.4;
+    }
+
+    &__cerrar {
+        background: none;
+        border: none;
+        color: $color-text-muted;
+        font-size: $font-size-md;
+        line-height: 1;
+        cursor: pointer;
+        padding: 0 0 0 $spacing-xs;
+        transition: color 0.18s ease;
+
+        &:hover {
+            color: $color-text;
+        }
+    }
+
+    &--exito {
+        border-color: rgba($color-ingreso, 0.32);
+
+        .toast__icono {
+            background: $color-ingreso-bg;
+            color: $color-ingreso;
+        }
+    }
+
+    &--error {
+        border-color: rgba($color-gasto, 0.32);
+
+        .toast__icono {
+            background: $color-gasto-bg;
+            color: $color-gasto;
+        }
+    }
+
+    &--info {
+        border-color: rgba($color-primary, 0.32);
+
+        .toast__icono {
+            background: rgba(34, 211, 238, 0.18);
+            color: $color-primary;
+        }
+    }
+}
+
+@keyframes toast-in {
+    from {
+        opacity: 0;
+        transform: translateX(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

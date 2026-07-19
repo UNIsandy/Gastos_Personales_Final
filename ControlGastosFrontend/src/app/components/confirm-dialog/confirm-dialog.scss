@@ -1,0 +1,79 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.confirm-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    display: grid;
+    place-items: center;
+    background: rgba(4, 9, 17, 0.62);
+    backdrop-filter: blur(4px);
+    padding: $spacing-lg;
+    animation: overlay-in 0.18s ease;
+}
+
+.confirm-dialog {
+    @include card;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    animation: dialog-in 0.22s ease;
+
+    &__titulo {
+        font-size: $font-size-lg;
+        font-weight: 800;
+        color: $color-text;
+        margin-bottom: $spacing-sm;
+    }
+
+    &__mensaje {
+        color: $color-text-light;
+        font-size: $font-size-sm;
+        line-height: 1.5;
+        margin-bottom: $spacing-lg;
+    }
+
+    &__acciones {
+        display: flex;
+        gap: $spacing-sm;
+        justify-content: center;
+    }
+
+    &__btn {
+        @include btn-base;
+        flex: 1;
+
+        &--cancelar {
+            background: rgba(151, 188, 226, 0.12);
+            color: $color-text;
+            border: 1px solid $color-border;
+        }
+
+        &--confirmar {
+            @include btn-primary;
+        }
+    }
+
+    &--peligroso &__btn--confirmar {
+        background-image: none;
+        background-color: $color-gasto;
+        box-shadow: 0 12px 30px rgba(255, 119, 119, 0.24);
+    }
+}
+
+@keyframes overlay-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes dialog-in {
+    from {
+        opacity: 0;
+        transform: translateY(-12px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}

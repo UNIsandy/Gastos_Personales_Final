@@ -1,0 +1,29 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.home {
+    max-width: 1180px;
+    margin: 0 auto;
+
+    &__subtitle {
+        font-size: $font-size-lg;
+        font-weight: 700;
+        color: $color-text;
+        margin-bottom: $spacing-md;
+    }
+
+    &__lista {
+        display: grid;
+        gap: $spacing-sm;
+    }
+
+    &__error {
+        background: $color-gasto-light;
+        color: $color-gasto;
+        padding: $spacing-sm $spacing-md;
+        border-radius: $border-radius-md;
+        margin-bottom: $spacing-md;
+        font-size: $font-size-sm;
+        border: 1px solid rgba($color-gasto, 0.28);
+    }
+}

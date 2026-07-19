@@ -1,0 +1,134 @@
+@use 'variables' as *;
+
+// Mixin para botones
+@mixin btn-base {
+    border: none;
+    border-radius: $border-radius-md;
+    cursor: pointer;
+    font-family: $font-family;
+    font-size: $font-size-sm;
+    font-weight: 600;
+    padding: $spacing-sm $spacing-md;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease, border-color 0.18s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-xs;
+    min-height: 40px;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: $shadow-sm;
+    }
+
+    &:active {
+        transform: translateY(-1px);
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+}
+
+@mixin btn-primary {
+    @include btn-base;
+    background-image: $gradient-accent;
+    color: $color-white;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 12px 30px rgba(34, 211, 238, 0.22);
+
+    &:hover:not(:disabled) {
+        filter: brightness(1.06);
+    }
+}
+
+@mixin btn-ingreso {
+    @include btn-base;
+    background-color: $color-ingreso;
+    color: $color-white;
+}
+
+@mixin btn-gasto {
+    @include btn-base;
+    background-color: $color-gasto;
+    color: $color-white;
+}
+
+// Mixin para tarjetas
+@mixin card {
+    background: $gradient-panel;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-sm;
+    padding: $spacing-lg;
+    backdrop-filter: blur(18px);
+    transition: box-shadow 0.25s ease, transform 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+        box-shadow: $shadow-md;
+        border-color: rgba(34, 211, 238, 0.28);
+        transform: translateY(-3px);
+    }
+}
+
+// Mixin para inputs
+@mixin input {
+    border: 1px solid $color-border;
+    border-radius: $border-radius-md;
+    font-family: $font-family;
+    font-size: $font-size-md;
+    padding: $spacing-sm $spacing-md;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    width: 100%;
+    background: rgba(6, 14, 25, 0.72);
+    color: $color-text;
+
+    &::placeholder {
+        color: $color-text-muted;
+    }
+
+    &:focus {
+        border-color: $color-primary;
+        outline: none;
+        background: rgba(8, 17, 31, 0.95);
+        box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.14), 0 10px 30px rgba(34, 211, 238, 0.08);
+    }
+}
+
+// Mixin para responsive
+@mixin respond-to($breakpoint) {
+    @if $breakpoint == 'sm' {
+        @media (max-width: 576px) { @content; }
+    } @else if $breakpoint == 'md' {
+        @media (max-width: 768px) { @content; }
+    } @else if $breakpoint == 'lg' {
+        @media (max-width: 992px) { @content; }
+    }
+}
+
+// Mixin para tarjetas (alias español)
+@mixin tarjeta {
+    @include card;
+}
+
+// Mixin para botón pequeño
+@mixin btn-small {
+    @include btn-base;
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-xs;
+}
+
+// Mixin para etiquetas de tipo
+@mixin tipo-badge($bg-color, $text-color) {
+    background-color: $bg-color;
+    color: $text-color;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-xs;
+    font-weight: 700;
+    padding: 4px $spacing-sm;
+    text-transform: uppercase;
+    box-shadow: 0 4px 12px rgba(15,23,36,0.03);
+}

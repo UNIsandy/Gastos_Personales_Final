@@ -1,0 +1,157 @@
+<div class="metas-page">
+  <div class="header">
+    <div>
+      <span class="header__eyebrow">Ahorro</span>
+      <h1>Metas de Ahorro</h1>
+    </div>
+    <button class="btn-primary" (click)="toggleForm()">
+      {{ mostrandoForm ? 'Cancelar' : '+ Nueva Meta' }}
+    </button>
+  </div>
+
+  <div class="nivel-global">
+    <div class="nivel-badge {{ nivelGlobal.toLowerCase() }}">
+      <span class="texto">Nivel {{ nivelGlobal }}</span>
+    </div>
+    <div class="progreso-global">
+      <span class="label">Progreso global: {{ progresoGlobal }}%</span>
+      <div class="barra">
+        <div class="fill" [style.width.%]="progresoGlobal"></div>
+      </div>
+    </div>
+  </div>
+
+  @if (mostrandoForm) {
+    <form class="form-meta" [formGroup]="formulario" (ngSubmit)="crearMeta()">
+      <div class="form-meta__campo">
+        <input class="form-meta__input" formControlName="nombre" placeholder="Nombre de la meta"
+               [class.form-meta__input--invalid]="cNombre?.invalid && cNombre?.touched">
+        @if (cNombre?.invalid && cNombre?.touched) {
+          <span class="form-meta__error">
+            @if (cNombre?.errors?.['required']) { El nombre es obligatorio }
+            @if (cNombre?.errors?.['minlength']) { Mínimo 3 caracteres }
+          </span>
+        }
+      </div>
+      <div class="form-meta__campo">
+        <input class="form-meta__input" formControlName="montoObjetivo" type="number" placeholder="Monto objetivo S/"
+               [class.form-meta__input--invalid]="cMonto?.invalid && cMonto?.touched">
+        @if (cMonto?.invalid && cMonto?.touched) {
+          <span class="form-meta__error">
+            @if (cMonto?.errors?.['required']) { El monto es obligatorio }
+            @if (cMonto?.errors?.['min']) { Debe ser mayor a 0 }
+          </span>
+        }
+      </div>
+      <div class="form-meta__campo">
+        <input class="form-meta__input" formControlName="fechaLimite" type="date"
+               [class.form-meta__input--invalid]="cFechaLimite?.invalid && cFechaLimite?.touched">
+        @if (cFechaLimite?.invalid && cFechaLimite?.touched) {
+          <span class="form-meta__error">
+            @if (cFechaLimite?.errors?.['required']) { La fecha es obligatoria }
+            @if (cFechaLimite?.errors?.['fechaPasada']) { La fecha no puede ser pasada }
+          </span>
+        }
+      </div>
+      <button class="btn-primary" type="submit" [disabled]="formulario.invalid">Guardar Meta</button>
+    </form>
+  }
+
+  <div class="filtro-tabs">
+    <button class="tab" [class.tab--activo]="filtro === 'activas'" (click)="filtro = 'activas'">
+      En progreso ({{ metas.filter(m => m.activa).length }})
+    </button>
+    <button class="tab" [class.tab--activo]="filtro === 'completadas'" (click)="filtro = 'completadas'">
+      Completadas ({{ metas.filter(m => !m.activa).length }})
+    </button>
+  </div>
+
+  @if (metasFiltradas.length === 0) {
+    <div class="sin-metas">
+      @if (filtro === 'completadas') {
+        <p>Aún no tienes metas completadas. ¡Sigue ahorrando!</p>
+      } @else {
+        <p>No hay metas activas. Crea una nueva meta para empezar.</p>
+      }
+    </div>
+  }
+
+  <div class="metas-grid">
+    @for (meta of metasFiltradas; track meta.id) {
+      <div class="meta-card {{ meta.activa ? 'activa' : 'completada' }}">
+        <div class="meta-header">
+          <h3>{{ meta.nombre }}</h3>
+          <span class="nivel-badge pequeno {{ nivel(meta).toLowerCase() }}">{{ nivel(meta) }}</span>
+        </div>
+
+        <div class="montos">
+          <span>S/ {{ meta.montoActual.toFixed(2) }} / S/ {{ meta.montoObjetivo.toFixed(2) }}</span>
+        </div>
+
+        <div class="barra-progreso">
+          <div class="fill {{ nivel(meta).toLowerCase() }}" [style.width.%]="progreso(meta)"></div>
+        </div>
+
+        <div class="meta-footer">
+          <span class="fecha">Límite: {{ meta.fechaLimite }}</span>
+          @if (meta.activa) {
+            <span class="badge activa">En progreso</span>
+          } @else {
+            <span class="badge completada">Completada</span>
+          }
+        </div>
+
+        <div class="meta-acciones">
+          @if (meta.activa) {
+            <div class="aporte">
+              <input [(ngModel)]="mensajeAporte[meta.id!]" type="number" placeholder="Monto a aportar" />
+              <button class="btn-small" (click)="aportar(meta)">Aportar</button>
+            </div>
+          }
+          <button class="btn-editar" (click)="editar(meta)">Editar</button>
+          <button class="btn-eliminar" (click)="eliminar(meta)">Eliminar</button>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (editandoMeta) {
+    <form class="form-meta form-editar" [formGroup]="formularioEditar" (ngSubmit)="guardarEdicion()">
+      <h3>Editar Meta</h3>
+      <div class="form-meta__campo">
+        <input class="form-meta__input" formControlName="nombre" placeholder="Nombre de la meta"
+               [class.form-meta__input--invalid]="ceNombre?.invalid && ceNombre?.touched">
+        @if (ceNombre?.invalid && ceNombre?.touched) {
+          <span class="form-meta__error">
+            @if (ceNombre?.errors?.['required']) { El nombre es obligatorio }
+            @if (ceNombre?.errors?.['minlength']) { Mínimo 3 caracteres }
+          </span>
+        }
+      </div>
+      <div class="form-meta__campo">
+        <input class="form-meta__input" formControlName="montoObjetivo" type="number" placeholder="Monto objetivo S/"
+               [class.form-meta__input--invalid]="ceMonto?.invalid && ceMonto?.touched">
+        @if (ceMonto?.invalid && ceMonto?.touched) {
+          <span class="form-meta__error">
+            @if (ceMonto?.errors?.['required']) { El monto es obligatorio }
+            @if (ceMonto?.errors?.['min']) { Debe ser mayor a 0 }
+          </span>
+        }
+      </div>
+      <div class="form-meta__campo">
+        <input class="form-meta__input" formControlName="fechaLimite" type="date"
+               [class.form-meta__input--invalid]="ceFechaLimite?.invalid && ceFechaLimite?.touched">
+        @if (ceFechaLimite?.invalid && ceFechaLimite?.touched) {
+          <span class="form-meta__error">
+            @if (ceFechaLimite?.errors?.['required']) { La fecha es obligatoria }
+            @if (ceFechaLimite?.errors?.['fechaPasada']) { La fecha no puede ser pasada }
+          </span>
+        }
+      </div>
+      <div class="form-acciones">
+        <button class="btn-primary" type="submit" [disabled]="formularioEditar.invalid">Guardar cambios</button>
+        <button class="btn-cancelar" type="button" (click)="cancelarEdicion()">Cancelar</button>
+      </div>
+    </form>
+  }
+</div>
