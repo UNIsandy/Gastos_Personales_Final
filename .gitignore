@@ -1,0 +1,4 @@
+node_modules/
+sync-db.js
+package.json
+package-lock.json

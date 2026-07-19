@@ -105,6 +105,7 @@ export class MetasComponent implements OnInit {
   }
 
   crearMeta() {
+    this.formulario.markAllAsTouched();
     if (this.formulario.invalid) return;
     const v = this.formulario.value;
     this.service.crear({
@@ -141,6 +142,7 @@ export class MetasComponent implements OnInit {
   }
 
   guardarEdicion() {
+    this.formularioEditar.markAllAsTouched();
     if (this.formularioEditar.invalid || !this.editandoMeta) return;
     const v = this.formularioEditar.value;
     this.service.actualizar(this.editandoMeta.id!, {

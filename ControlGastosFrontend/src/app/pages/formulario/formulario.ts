@@ -77,6 +77,7 @@ export class FormularioComponent implements OnInit {
   }
 
   guardar() {
+    this.formulario.markAllAsTouched();
     if (this.formulario.invalid) return;
     this.error = '';
 
