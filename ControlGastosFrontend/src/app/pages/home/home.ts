@@ -42,7 +42,13 @@ export class HomeComponent implements OnInit {
       .reduce((s, t) => s + t.monto, 0);
   }
 
-  eliminar(id: number) {
+  async eliminar(id: number) {
+    const confirmado = await this.notificaciones.confirmar(
+      '¿Está seguro de eliminar esta transacción?',
+      { titulo: 'Eliminar transacción', textoConfirmar: 'Eliminar', peligroso: true }
+    );
+    if (!confirmado) return;
+
     this.service.eliminar(id).subscribe({
       next: () => {
         this.transacciones = this.transacciones.filter(t => t.id !== id);
