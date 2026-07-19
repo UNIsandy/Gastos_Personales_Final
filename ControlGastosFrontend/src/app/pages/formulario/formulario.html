@@ -83,8 +83,34 @@
         </div>
 
         <div class="formulario__acciones">
-            <button type="submit" class="formulario__btn-guardar">Guardar</button>
+            <button type="submit" class="formulario__btn-guardar" [disabled]="guardando">{{ guardando ? 'Guardando...' : 'Guardar' }}</button>
             <a routerLink="/lista" class="formulario__btn-cancelar">Cancelar</a>
         </div>
     </form>
+
+    @if (riesgo) {
+        <div class="riesgo-overlay" (click)="cancelarRiesgo()">
+            <div class="riesgo-modal" (click)="$event.stopPropagation()">
+                <div class="riesgo-modal__header">
+                    <span class="riesgo-modal__icono">⚠️</span>
+                    <h3>{{ riesgo.titulo }}</h3>
+                </div>
+                <p class="riesgo-modal__mensaje">{{ riesgo.mensaje }}</p>
+                @if (riesgo.recomendaciones.length > 0) {
+                    <div class="riesgo-modal__recomendaciones">
+                        <strong>Recomendaciones:</strong>
+                        <ul>
+                            @for (rec of riesgo.recomendaciones; track rec) {
+                                <li>{{ rec }}</li>
+                            }
+                        </ul>
+                    </div>
+                }
+                <div class="riesgo-modal__acciones">
+                    <button class="riesgo-modal__btn-continuar" (click)="confirmarRiesgo()">Continuar de todas formas</button>
+                    <button class="riesgo-modal__btn-cancelar" (click)="cancelarRiesgo()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    }
 </div>

@@ -20,6 +20,8 @@ export class FormularioComponent implements OnInit {
   previewUrl: string | null = null;
   error = '';
   formulario!: FormGroup;
+  riesgo: { titulo: string; mensaje: string; recomendaciones: string[] } | null = null;
+  guardando = false;
 
   constructor(
     private fb: FormBuilder,
@@ -79,11 +81,61 @@ export class FormularioComponent implements OnInit {
   guardar() {
     this.formulario.markAllAsTouched();
     if (this.formulario.invalid) return;
-    this.error = '';
+
+    if (this.esEdicion || this.formulario.value.tipo === 'INGRESO') {
+      this.ejecutarGuardar();
+      return;
+    }
 
     this.auth.getUsuarioId().subscribe({
       next: (usuarioId) => {
         if (!usuarioId) { this.error = 'Usuario no autenticado'; return; }
+        const body = {
+          usuarioId,
+          tipo: this.formulario.value.tipo,
+          monto: this.formulario.value.monto,
+          categoria: this.formulario.value.categoria
+        };
+
+        this.service.verificarRiesgo(body).subscribe({
+          next: (res: any) => {
+            if (res.riesgo) {
+              this.riesgo = {
+                titulo: res.titulo,
+                mensaje: res.mensaje,
+                recomendaciones: res.recomendaciones
+              };
+            } else {
+              this.ejecutarGuardar();
+            }
+          },
+          error: () => this.ejecutarGuardar()
+        });
+      },
+      error: (err) => {
+        this.error = 'Error de autenticación: ' + err.message;
+        this.notificaciones.error('Error de autenticación: ' + err.message);
+      }
+    });
+  }
+
+  cancelarRiesgo() {
+    this.riesgo = null;
+  }
+
+  confirmarRiesgo() {
+    this.riesgo = null;
+    this.ejecutarGuardar();
+  }
+
+  private ejecutarGuardar() {
+    if (this.guardando) return;
+    this.guardando = true;
+    this.error = '';
+
+    this.auth.getUsuarioId().subscribe({
+      next: (usuarioId) => {
+        if (!usuarioId) { this.error = 'Usuario no autenticado'; this.guardando = false; return; }
 
         const data: any = {
           descripcion: this.formulario.value.descripcion,
@@ -106,12 +158,14 @@ export class FormularioComponent implements OnInit {
           error: (err) => {
             this.error = err.message;
             this.notificaciones.error(err.message || 'Error al guardar la transacción');
+            this.guardando = false;
           }
         });
       },
       error: (err) => {
         this.error = 'Error de autenticación: ' + err.message;
         this.notificaciones.error('Error de autenticación: ' + err.message);
+        this.guardando = false;
       }
     });
   }

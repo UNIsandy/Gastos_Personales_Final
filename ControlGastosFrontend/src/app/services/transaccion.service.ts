@@ -31,6 +31,10 @@ export class TransaccionService {
         return this.http.put<Transaccion>(`${this.apiUrl}/${id}`, data).pipe(catchError(this.handleError));
     }
 
+    verificarRiesgo(data: any): Observable<any> {
+        return this.http.post(`${this.apiUrl}/verificar-riesgo`, data).pipe(catchError(this.handleError));
+    }
+
     eliminar(id: number): Observable<void> {
         return this.http.delete<void>(`${this.apiUrl}/${id}`)
             .pipe(catchError(this.handleError));

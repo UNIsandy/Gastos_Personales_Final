@@ -119,6 +119,20 @@ public class TransaccionController {
         return ResponseEntity.ok(Map.of("message", "Transacción eliminada correctamente"));
     }
 
+    // VERIFICAR RIESGO ANTES DE CREAR TRANSACCION
+    @PostMapping("/verificar-riesgo")
+    public ResponseEntity<?> verificarRiesgo(@RequestBody Map<String, Object> body) {
+        try {
+            Long usuarioId = Long.valueOf(body.get("usuarioId").toString());
+            String tipo = (String) body.get("tipo");
+            Double monto = Double.valueOf(body.get("monto").toString());
+            String categoria = (String) body.getOrDefault("categoria", "");
+            return ResponseEntity.ok(transaccionService.verificarRiesgo(usuarioId, tipo, monto, categoria));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     // OBTENER POR USUARIO
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<List<Transaccion>> obtenerPorUsuario(@PathVariable Long usuarioId) {
