@@ -46,10 +46,9 @@ export class NotificationService {
     this.mostrarToast('info', mensaje, duracionMs);
   }
 
-  private mostrarToast(tipo: TipoToast, mensaje: string, duracionMs: number) {
+  private mostrarToast(tipo: TipoToast, mensaje: string, _duracionMs: number) {
     const id = ++this.idCounter;
     this.toasts.update(lista => [...lista, { id, tipo, mensaje }]);
-    setTimeout(() => this.cerrarToast(id), duracionMs);
   }
 
   cerrarToast(id: number) {
