@@ -414,3 +414,4 @@ public class AnalyticsService {
     consejos.sort(Comparator.comparingInt(ConsejoDTO::getPrioridad));
     return consejos;
     }
+}
