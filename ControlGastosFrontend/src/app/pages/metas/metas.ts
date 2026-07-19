@@ -101,6 +101,14 @@ export class MetasComponent implements OnInit {
     return 'BRONCE';
   }
 
+  esVencida(meta: MetaAhorro): boolean {
+    if (meta.activa) return false;
+    if (meta.montoActual >= meta.montoObjetivo) return false;
+    if (!meta.fechaLimite) return true;
+    const hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+    return new Date(meta.fechaLimite) < hoy;
+  }
+
   toggleForm() {
     this.mostrandoForm = !this.mostrandoForm;
     this.formulario.reset({ nombre: '', montoObjetivo: 0, fechaLimite: '' });

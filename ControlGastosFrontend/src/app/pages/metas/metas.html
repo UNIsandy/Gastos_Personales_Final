@@ -78,7 +78,7 @@
 
   <div class="metas-grid">
     @for (meta of metasFiltradas; track meta.id) {
-      <div class="meta-card {{ meta.activa ? 'activa' : 'completada' }}">
+      <div class="meta-card {{ meta.activa ? 'activa' : (esVencida(meta) ? 'vencida' : 'completada') }}">
         <div class="meta-header">
           <h3>{{ meta.nombre }}</h3>
           <span class="nivel-badge pequeno {{ nivel(meta).toLowerCase() }}">{{ nivel(meta) }}</span>
@@ -96,6 +96,8 @@
           <span class="fecha">Límite: {{ meta.fechaLimite }}</span>
           @if (meta.activa) {
             <span class="badge activa">En progreso</span>
+          } @else if (esVencida(meta)) {
+            <span class="badge vencida">Vencida</span>
           } @else {
             <span class="badge completada">Completada</span>
           }
@@ -107,7 +109,8 @@
               <input [(ngModel)]="mensajeAporte[meta.id!]" type="number" placeholder="Monto a aportar" />
               <button class="btn-small" (click)="aportar(meta)">Aportar</button>
             </div>
-          } @else {
+          }
+          @if (esVencida(meta)) {
             <button class="btn-small" (click)="mostrarReactivar(meta)">Reactivar</button>
           }
           <button class="btn-editar" (click)="editar(meta)">Editar</button>
