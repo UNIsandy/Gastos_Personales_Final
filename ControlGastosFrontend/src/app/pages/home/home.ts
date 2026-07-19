@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ResumenTotalesComponent } from '../../components/resumen-totales/resumen-totales';
 import { TarjetaGastoComponent } from '../../components/tarjeta-gasto/tarjeta-gasto';
 import { TransaccionService } from '../../services/transaccion.service';
+import { NotificationService } from '../../services/notification.service';
 import { Transaccion } from '../../models';
 import { CommonModule } from '@angular/common';
 
@@ -16,7 +17,7 @@ export class HomeComponent implements OnInit {
   transaccionesRecientes: Transaccion[] = [];
   error = '';
 
-  constructor(private service: TransaccionService) {}
+  constructor(private service: TransaccionService, private notificaciones: NotificationService) {}
 
   ngOnInit() {
     this.service.listarPorUsuario().subscribe({
@@ -39,5 +40,16 @@ export class HomeComponent implements OnInit {
     return this.transacciones
       .filter(t => t.tipo === 'GASTO')
       .reduce((s, t) => s + t.monto, 0);
+  }
+
+  eliminar(id: number) {
+    this.service.eliminar(id).subscribe({
+      next: () => {
+        this.transacciones = this.transacciones.filter(t => t.id !== id);
+        this.transaccionesRecientes = this.transaccionesRecientes.filter(t => t.id !== id);
+        this.notificaciones.exito('Transacción eliminada');
+      },
+      error: (err) => this.notificaciones.error(err.message)
+    });
   }
 }

@@ -15,7 +15,8 @@
                 [monto]="t.monto"
                 [descripcion]="t.descripcion"
                 [categoria]="t.categoria?.nombre || ''"
-                [fecha]="t.fecha">
+                [fecha]="t.fecha"
+                (eliminar)="eliminar($event)">
             </app-tarjeta-gasto>
         }
     </div>
