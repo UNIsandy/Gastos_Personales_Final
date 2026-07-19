@@ -1,7 +1,7 @@
 FROM node:22-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 COPY . .
 ARG API_BACKEND_URL=http://localhost:8080
 RUN sed -i "s|API_BACKEND_URL_PLACEHOLDER|${API_BACKEND_URL}|g" src/environments/environment.prod.ts
