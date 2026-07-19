@@ -7,6 +7,7 @@ import com.cgp.controlgasto.Repository.TransaccionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -30,14 +31,38 @@ public class MetaAhorroService {
         return repository.findById(id).orElse(null);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<MetaAhorro> obtenerPorUsuario(Long usuarioId) {
+        List<MetaAhorro> metas = repository.findByUsuarioId(usuarioId);
+        LocalDate hoy = LocalDate.now();
+        for (MetaAhorro meta : metas) {
+            if (meta.isActiva() && meta.getFechaLimite() != null
+                && meta.getFechaLimite().isBefore(hoy)
+                && (meta.getMontoActual() == null || meta.getMontoActual() < meta.getMontoObjetivo())) {
+                meta.setActiva(false);
+                repository.save(meta);
+            }
+        }
         return repository.findByUsuarioId(usuarioId);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<MetaAhorro> obtenerActivasPorUsuario(Long usuarioId) {
+        desactivarVencidas(usuarioId);
         return repository.findByUsuarioIdAndActivaTrue(usuarioId);
+    }
+
+    private void desactivarVencidas(Long usuarioId) {
+        List<MetaAhorro> metas = repository.findByUsuarioId(usuarioId);
+        LocalDate hoy = LocalDate.now();
+        for (MetaAhorro meta : metas) {
+            if (meta.isActiva() && meta.getFechaLimite() != null
+                && meta.getFechaLimite().isBefore(hoy)
+                && (meta.getMontoActual() == null || meta.getMontoActual() < meta.getMontoObjetivo())) {
+                meta.setActiva(false);
+                repository.save(meta);
+            }
+        }
     }
 
     @Transactional
@@ -108,6 +133,39 @@ public class MetaAhorroService {
         } else {
             meta.setActiva(true);
         }
+        return repository.save(meta);
+    }
+
+    @Transactional
+    public MetaAhorro reactivar(Long id, LocalDate nuevaFechaLimite, Double aporteInicial) {
+        MetaAhorro meta = repository.findById(id).orElse(null);
+        if (meta == null) return null;
+        if (meta.isActiva()) throw new RuntimeException("La meta ya está activa");
+        if (nuevaFechaLimite == null) throw new RuntimeException("Debes indicar una nueva fecha límite");
+        if (nuevaFechaLimite.isBefore(LocalDate.now())) throw new RuntimeException("La nueva fecha debe ser futura");
+        if (aporteInicial == null || aporteInicial <= 0) throw new RuntimeException("Debes hacer un aporte inicial para reactivar la meta");
+
+        if (aporteInicial > 0) {
+            var transacciones = transaccionRepository.findByUsuarioId(meta.getUsuario().getId());
+            double totalIngresos = transacciones.stream()
+                .filter(t -> t.getTipo() == TipoTransaccion.INGRESO)
+                .mapToDouble(t -> t.getMonto()).sum();
+            double totalGastos = transacciones.stream()
+                .filter(t -> t.getTipo() == TipoTransaccion.GASTO)
+                .mapToDouble(t -> t.getMonto()).sum();
+            double totalAportado = repository.findByUsuarioId(meta.getUsuario().getId()).stream()
+                .mapToDouble(m -> m.getMontoActual() != null ? m.getMontoActual() : 0.0)
+                .sum() - (meta.getMontoActual() != null ? meta.getMontoActual() : 0.0);
+            double disponible = totalIngresos - totalGastos - totalAportado;
+            if (aporteInicial > disponible) {
+                throw new RuntimeException("No tienes suficiente saldo. Disponible: S/ "
+                    + String.format("%.2f", disponible));
+            }
+        }
+
+        meta.setActiva(true);
+        meta.setFechaLimite(nuevaFechaLimite);
+        meta.setMontoActual(meta.getMontoActual() + aporteInicial);
         return repository.save(meta);
     }
 

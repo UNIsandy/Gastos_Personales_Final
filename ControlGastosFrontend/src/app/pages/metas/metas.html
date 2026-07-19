@@ -107,6 +107,8 @@
               <input [(ngModel)]="mensajeAporte[meta.id!]" type="number" placeholder="Monto a aportar" />
               <button class="btn-small" (click)="aportar(meta)">Aportar</button>
             </div>
+          } @else {
+            <button class="btn-small" (click)="mostrarReactivar(meta)">Reactivar</button>
           }
           <button class="btn-editar" (click)="editar(meta)">Editar</button>
           <button class="btn-eliminar" (click)="eliminar(meta)">Eliminar</button>
@@ -114,6 +116,31 @@
       </div>
     }
   </div>
+
+  @if (reactivarMeta) {
+    <div class="form-meta form-reactivar">
+      <h3>Reactivar: {{ reactivarMeta.nombre }}</h3>
+      <p class="reactivar-desc">Extiende la fecha y haz un aporte inicial para reactivar esta meta.</p>
+      <div class="form-meta__campo">
+        <input class="form-meta__input" [(ngModel)]="nuevaFechaLimite" type="date" placeholder="Nueva fecha límite"
+               [class.form-meta__input--invalid]="!nuevaFechaLimite">
+        @if (!nuevaFechaLimite) {
+          <span class="form-meta__error">La nueva fecha es obligatoria</span>
+        }
+      </div>
+      <div class="form-meta__campo">
+        <input class="form-meta__input" [(ngModel)]="aporteReactivar" type="number" placeholder="Aporte inicial S/"
+               [class.form-meta__input--invalid]="aporteReactivar <= 0">
+        @if (aporteReactivar <= 0) {
+          <span class="form-meta__error">Debes hacer un aporte inicial</span>
+        }
+      </div>
+      <div class="form-acciones">
+        <button class="btn-primary" (click)="reactivar()">Reactivar Meta</button>
+        <button class="btn-cancelar" (click)="cancelarReactivar()">Cancelar</button>
+      </div>
+    </div>
+  }
 
   @if (editandoMeta) {
     <form class="form-meta form-editar" [formGroup]="formularioEditar" (ngSubmit)="guardarEdicion()">

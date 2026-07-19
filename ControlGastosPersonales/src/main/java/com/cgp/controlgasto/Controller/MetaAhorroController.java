@@ -71,6 +71,21 @@ public class MetaAhorroController {
         }
     }
 
+    @PostMapping("/{id}/reactivar")
+    public ResponseEntity<?> reactivar(@PathVariable Long id, @RequestBody Map<String, Object> body) {
+        try {
+            String fechaStr = (String) body.get("nuevaFechaLimite");
+            Double aporteInicial = body.get("aporteInicial") != null
+                ? ((Number) body.get("aporteInicial")).doubleValue() : null;
+            MetaAhorro meta = service.reactivar(id,
+                java.time.LocalDate.parse(fechaStr), aporteInicial);
+            if (meta == null) return ResponseEntity.status(404).body("Meta no encontrada");
+            return ResponseEntity.ok(meta);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminar(@PathVariable Long id) {
         boolean eliminado = service.eliminar(id);

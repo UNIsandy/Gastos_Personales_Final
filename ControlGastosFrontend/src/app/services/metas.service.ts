@@ -37,6 +37,11 @@ export class MetasService {
             .pipe(catchError(this.handleError));
     }
 
+    reactivar(id: number, nuevaFechaLimite: string, aporteInicial: number): Observable<MetaAhorro> {
+        return this.http.post<MetaAhorro>(`${this.apiUrl}/${id}/reactivar`, { nuevaFechaLimite, aporteInicial })
+            .pipe(catchError(this.handleError));
+    }
+
     eliminar(id: number): Observable<string> {
         return this.http.delete<string>(`${this.apiUrl}/${id}`, { responseType: 'text' as 'json' })
             .pipe(catchError(this.handleError));

@@ -27,6 +27,9 @@ export class MetasComponent implements OnInit {
   editandoMeta: MetaAhorro | null = null;
   mensajeAporte: { [key: number]: number } = {};
   filtro: 'activas' | 'completadas' = 'activas';
+  reactivarMeta: MetaAhorro | null = null;
+  nuevaFechaLimite = '';
+  aporteReactivar = 0;
   formulario!: FormGroup;
   formularioEditar!: FormGroup;
 
@@ -175,6 +178,33 @@ export class MetasComponent implements OnInit {
       error: (err) => {
         this.error = err.message;
         this.notificaciones.error(err.message || 'Error al registrar el aporte');
+      }
+    });
+  }
+
+  mostrarReactivar(meta: MetaAhorro) {
+    this.reactivarMeta = meta;
+    this.nuevaFechaLimite = '';
+    this.aporteReactivar = 0;
+  }
+
+  cancelarReactivar() {
+    this.reactivarMeta = null;
+    this.nuevaFechaLimite = '';
+    this.aporteReactivar = 0;
+  }
+
+  reactivar() {
+    if (!this.reactivarMeta || !this.nuevaFechaLimite || !this.aporteReactivar || this.aporteReactivar <= 0) return;
+    this.service.reactivar(this.reactivarMeta.id!, this.nuevaFechaLimite, this.aporteReactivar).subscribe({
+      next: () => {
+        this.cargar();
+        this.cancelarReactivar();
+        this.notificaciones.exito('Meta reactivada exitosamente');
+      },
+      error: (err) => {
+        this.error = err.message;
+        this.notificaciones.error(err.message || 'Error al reactivar la meta');
       }
     });
   }
