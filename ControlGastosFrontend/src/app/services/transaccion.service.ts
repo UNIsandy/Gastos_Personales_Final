@@ -41,7 +41,8 @@ export class TransaccionService {
     }
 
     private handleError(error: HttpErrorResponse) {
-        const msg = error.error?.error || error.error?.message || error.message || 'Error desconocido';
+        const msg = typeof error.error === 'string' ? error.error
+            : error.error?.error || error.error?.message || error.message || 'Error desconocido';
         return throwError(() => new Error(msg));
     }
 }
