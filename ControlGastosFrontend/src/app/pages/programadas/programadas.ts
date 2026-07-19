@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { TransaccionService } from '../../services/transaccion.service';
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
@@ -9,6 +9,7 @@ import { Transaccion } from '../../models';
 @Component({
   selector: 'app-programadas',
   imports: [CommonModule, ReactiveFormsModule],
+  providers: [DatePipe],
   templateUrl: './programadas.html',
   styleUrl: './programadas.scss'
 })
@@ -16,13 +17,15 @@ export class ProgramadasComponent implements OnInit {
   transacciones: Transaccion[] = [];
   cargando = true;
   mostrandoForm = false;
+  editando: Transaccion | null = null;
   formulario!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private service: TransaccionService,
     private auth: AuthService,
-    private notificaciones: NotificationService
+    private notificaciones: NotificationService,
+    private datePipe: DatePipe
   ) {}
 
   ngOnInit() {
@@ -54,9 +57,28 @@ export class ProgramadasComponent implements OnInit {
 
   toggleForm() {
     this.mostrandoForm = !this.mostrandoForm;
+    this.editando = null;
     if (!this.mostrandoForm) {
       this.formulario.reset({ descripcion: '', monto: 0, tipo: 'GASTO', categoria: 'Alimentación', fecha: '' });
     }
+  }
+
+  editar(t: Transaccion) {
+    this.editando = t;
+    this.mostrandoForm = true;
+    this.formulario.patchValue({
+      descripcion: t.descripcion,
+      monto: t.monto,
+      tipo: t.tipo,
+      categoria: t.categoria?.nombre || 'Otros',
+      fecha: t.fecha
+    });
+  }
+
+  cancelarEdicion() {
+    this.editando = null;
+    this.mostrandoForm = false;
+    this.formulario.reset({ descripcion: '', monto: 0, tipo: 'GASTO', categoria: 'Alimentación', fecha: '' });
   }
 
   guardar() {
@@ -75,14 +97,25 @@ export class ProgramadasComponent implements OnInit {
         usuario: { id: usuarioId }
       };
 
-      this.service.crearProgramada(data).subscribe({
-        next: () => {
-          this.notificaciones.exito('Transacción programada creada');
-          this.toggleForm();
-          this.cargar();
-        },
-        error: (err) => this.notificaciones.error(err.message || 'Error al crear')
-      });
+      if (this.editando) {
+        this.service.actualizar(this.editando.id!, data).subscribe({
+          next: () => {
+            this.notificaciones.exito('Transacción programada actualizada');
+            this.cancelarEdicion();
+            this.cargar();
+          },
+          error: (err) => this.notificaciones.error(err.message || 'Error al actualizar')
+        });
+      } else {
+        this.service.crearProgramada(data).subscribe({
+          next: () => {
+            this.notificaciones.exito('Transacción programada creada');
+            this.toggleForm();
+            this.cargar();
+          },
+          error: (err) => this.notificaciones.error(err.message || 'Error al crear')
+        });
+      }
     });
   }
 
@@ -94,5 +127,16 @@ export class ProgramadasComponent implements OnInit {
       },
       error: (err) => this.notificaciones.error(err.message)
     });
+  }
+
+  diasRestantes(fecha: string): string {
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const target = new Date(fecha);
+    target.setHours(0, 0, 0, 0);
+    const diff = Math.ceil((target.getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24));
+    if (diff === 0) return 'Hoy';
+    if (diff === 1) return 'Mañana';
+    return `Faltan ${diff} días`;
   }
 }

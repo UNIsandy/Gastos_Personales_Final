@@ -11,6 +11,8 @@
 
   @if (mostrandoForm) {
     <form class="programadas__form" [formGroup]="formulario" (ngSubmit)="guardar()">
+      <h3 class="programadas__form-title">{{ editando ? 'Editar transacción programada' : 'Nueva transacción programada' }}</h3>
+
       <div class="programadas__campo">
         <label class="programadas__label">Descripción</label>
         <input class="programadas__input" formControlName="descripcion"
@@ -67,8 +69,8 @@
       </div>
 
       <div class="programadas__acciones">
-        <button type="submit" class="programadas__btn-guardar">Guardar</button>
-        <button type="button" class="programadas__btn-cancelar" (click)="toggleForm()">Cancelar</button>
+        <button type="submit" class="programadas__btn-guardar">{{ editando ? 'Actualizar' : 'Guardar' }}</button>
+        <button type="button" class="programadas__btn-cancelar" (click)="cancelarEdicion()">Cancelar</button>
       </div>
     </form>
   }
@@ -85,16 +87,22 @@
       @for (t of transacciones; track t.id) {
         <div class="programadas__item" [class.programadas__item--ingreso]="t.tipo === 'INGRESO'">
           <div class="programadas__item-info">
-            <span class="programadas__item-icono">{{ t.tipo === 'GASTO' ? '📅' : '📅' }}</span>
-            <div>
+            <span class="programadas__item-icono">📅</span>
+            <div class="programadas__item-detalle">
               <strong>{{ t.descripcion }}</strong>
               <span class="programadas__item-meta">{{ t.categoria?.nombre }} · {{ t.fecha }}</span>
+              <span class="programadas__item-dias" [class.programadas__item-dias--hoy]="diasRestantes(t.fecha) === 'Hoy'">
+                {{ diasRestantes(t.fecha) }}
+              </span>
             </div>
           </div>
           <div class="programadas__item-monto {{ t.tipo === 'GASTO' ? 'gasto' : 'ingreso' }}">
             {{ t.tipo === 'GASTO' ? '-' : '+' }}S/ {{ t.monto.toFixed(2) }}
           </div>
-          <button class="programadas__item-eliminar" (click)="eliminar(t)">✕</button>
+          <div class="programadas__item-acciones">
+            <button class="programadas__item-editar" (click)="editar(t)">✎</button>
+            <button class="programadas__item-eliminar" (click)="eliminar(t)">✕</button>
+          </div>
         </div>
       }
     </div>

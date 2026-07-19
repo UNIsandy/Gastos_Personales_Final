@@ -38,6 +38,14 @@
     margin-bottom: $spacing-lg;
   }
 
+  &__form-title {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-size: $font-size-lg;
+    font-weight: 800;
+    color: $color-text;
+  }
+
   &__campo {
     min-width: 0;
   }
@@ -133,7 +141,9 @@
       gap: $spacing-sm;
       flex: 1;
       min-width: 0;
+    }
 
+    &-detalle {
       strong {
         display: block;
         font-size: $font-size-sm;
@@ -150,6 +160,22 @@
       color: $color-text-light;
     }
 
+    &-dias {
+      display: inline-block;
+      font-size: $font-size-xs;
+      font-weight: 700;
+      color: $color-primary;
+      background: rgba($color-primary, 0.1);
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-top: 2px;
+
+      &--hoy {
+        color: $color-gasto;
+        background: rgba($color-gasto, 0.12);
+      }
+    }
+
     &-monto {
       font-weight: 800;
       font-size: $font-size-sm;
@@ -159,20 +185,35 @@
       &.ingreso { color: #22c55e; }
     }
 
+    &-acciones {
+      display: flex;
+      gap: $spacing-xs;
+    }
+
+    &-editar,
     &-eliminar {
       @include btn-base;
       width: 32px;
       height: 32px;
       padding: 0;
       border-radius: 50%;
-      background: rgba($color-gasto, 0.1);
-      color: $color-gasto;
-      border: none;
-      font-size: $font-size-xs;
+      font-size: $font-size-sm;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    &-editar {
+      background: rgba($color-primary, 0.1);
+      color: $color-primary;
+      border: none;
+    }
+
+    &-eliminar {
+      background: rgba($color-gasto, 0.1);
+      color: $color-gasto;
+      border: none;
     }
   }
 
