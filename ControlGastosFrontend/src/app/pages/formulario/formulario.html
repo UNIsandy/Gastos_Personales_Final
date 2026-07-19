@@ -89,16 +89,16 @@
     </form>
 
     @if (riesgo) {
-        <div class="riesgo-overlay" (click)="cancelarRiesgo()">
-            <div class="riesgo-modal" (click)="$event.stopPropagation()">
+        <div class="riesgo-overlay" (click)="riesgo.exito ? confirmarRiesgo() : cancelarRiesgo()">
+            <div class="riesgo-modal" [class.riesgo-modal--exito]="riesgo.exito" (click)="$event.stopPropagation()">
                 <div class="riesgo-modal__header">
-                    <span class="riesgo-modal__icono">⚠️</span>
+                    <span class="riesgo-modal__icono">{{ riesgo.exito ? '✅' : '⚠️' }}</span>
                     <h3>{{ riesgo.titulo }}</h3>
                 </div>
                 <p class="riesgo-modal__mensaje">{{ riesgo.mensaje }}</p>
                 @if (riesgo.recomendaciones.length > 0) {
                     <div class="riesgo-modal__recomendaciones">
-                        <strong>Recomendaciones:</strong>
+                        <strong>{{ riesgo.exito ? 'Sugerencias:' : 'Recomendaciones:' }}</strong>
                         <ul>
                             @for (rec of riesgo.recomendaciones; track rec) {
                                 <li>{{ rec }}</li>
@@ -107,8 +107,12 @@
                     </div>
                 }
                 <div class="riesgo-modal__acciones">
-                    <button class="riesgo-modal__btn-continuar" (click)="confirmarRiesgo()">Continuar de todas formas</button>
-                    <button class="riesgo-modal__btn-cancelar" (click)="cancelarRiesgo()">Cancelar</button>
+                    @if (riesgo.exito) {
+                        <button class="riesgo-modal__btn-continuar" (click)="confirmarRiesgo()">Guardar ingreso</button>
+                    } @else {
+                        <button class="riesgo-modal__btn-continuar" (click)="confirmarRiesgo()">Continuar de todas formas</button>
+                        <button class="riesgo-modal__btn-cancelar" (click)="cancelarRiesgo()">Cancelar</button>
+                    }
                 </div>
             </div>
         </div>

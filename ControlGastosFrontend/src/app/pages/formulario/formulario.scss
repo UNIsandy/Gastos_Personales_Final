@@ -177,6 +177,14 @@
         width: 100%;
         box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
 
+        &--exito {
+            border-color: rgba(#22c55e, 0.4);
+
+            .riesgo-modal__header h3 {
+                color: #22c55e;
+            }
+        }
+
         &__header {
             display: flex;
             align-items: center;

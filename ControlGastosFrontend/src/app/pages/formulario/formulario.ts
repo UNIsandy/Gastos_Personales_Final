@@ -20,7 +20,7 @@ export class FormularioComponent implements OnInit {
   previewUrl: string | null = null;
   error = '';
   formulario!: FormGroup;
-  riesgo: { titulo: string; mensaje: string; recomendaciones: string[] } | null = null;
+  riesgo: { titulo: string; mensaje: string; recomendaciones: string[]; exito: boolean } | null = null;
   guardando = false;
 
   constructor(
@@ -82,7 +82,7 @@ export class FormularioComponent implements OnInit {
     this.formulario.markAllAsTouched();
     if (this.formulario.invalid) return;
 
-    if (this.esEdicion || this.formulario.value.tipo === 'INGRESO') {
+    if (this.esEdicion) {
       this.ejecutarGuardar();
       return;
     }
@@ -99,11 +99,12 @@ export class FormularioComponent implements OnInit {
 
         this.service.verificarRiesgo(body).subscribe({
           next: (res: any) => {
-            if (res.riesgo) {
+            if (res.riesgo || res.titulo) {
               this.riesgo = {
                 titulo: res.titulo,
                 mensaje: res.mensaje,
-                recomendaciones: res.recomendaciones
+                recomendaciones: res.recomendaciones,
+                exito: !res.riesgo
               };
             } else {
               this.ejecutarGuardar();

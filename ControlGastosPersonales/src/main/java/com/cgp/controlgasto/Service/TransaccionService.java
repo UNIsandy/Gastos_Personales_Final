@@ -109,11 +109,6 @@ public class TransaccionService {
         int mesActual = hoy.getMonthValue();
         int anioActual = hoy.getYear();
 
-        // Only check risk for expenses
-        if (!"GASTO".equalsIgnoreCase(tipo)) {
-            return new RiesgoDTO(false, null, null, recomendaciones);
-        }
-
         List<Transaccion> transacciones = transaccionRepository.findByUsuarioId(usuarioId);
         List<Transaccion> mesActualTransacciones = transacciones.stream()
             .filter(t -> t.getFecha().getMonthValue() == mesActual && t.getFecha().getYear() == anioActual)
@@ -127,8 +122,43 @@ public class TransaccionService {
             .filter(t -> t.getTipo() == TipoTransaccion.GASTO)
             .mapToDouble(Transaccion::getMonto).sum();
 
+        String titulo;
+        String mensaje;
+
+        // Positive feedback for INGRESO
+        if ("INGRESO".equalsIgnoreCase(tipo)) {
+            double ingresosProyectados = ingresosMes + monto;
+            double disponible = ingresosProyectados - gastosMes;
+
+            titulo = "✅ Buen progreso financiero";
+            mensaje = "Este ingreso mejora tu salud financiera. Tus ingresos del mes suman S/ "
+                + String.format("%.2f", ingresosProyectados) + ".";
+
+            if (gastosMes > 0) {
+                if (disponible > 0) {
+                    mensaje += " Después de tus gastos, te quedan S/ "
+                        + String.format("%.2f", disponible) + " disponibles.";
+                    recomendaciones.add("Destina al menos el 20% de tus ingresos al ahorro o metas.");
+                    recomendaciones.add("Con S/ " + String.format("%.2f", disponible)
+                        + " disponibles, podrías aportar a tus metas de ahorro este mes.");
+                } else if (disponible == 0) {
+                    mensaje += " Tus ingresos apenas cubren tus gastos.";
+                    recomendaciones.add("Busca aumentar tus ingresos o reducir gastos para generar margen de ahorro.");
+                } else {
+                    mensaje += " Aún tienes un déficit de S/ "
+                        + String.format("%.2f", Math.abs(disponible)) + " del mes.";
+                    recomendaciones.add("Revisa tus gastos para equilibrar tus finanzas.");
+                }
+            } else {
+                recomendaciones.add("Considera destinar parte de este ingreso a tus metas de ahorro.");
+                recomendaciones.add("Llevar un control de gastos te ayudará a mantener este buen hábito.");
+            }
+
+            return new RiesgoDTO(false, titulo, mensaje, recomendaciones);
+        }
+
         double gastosProyectados = gastosMes + monto;
-        String mensaje = "";
+        mensaje = "";
 
         if (ingresosMes == 0 && gastosMes == 0) {
             riesgo = true;
@@ -168,7 +198,7 @@ public class TransaccionService {
             recomendaciones.add("Ajusta tu presupuesto mensual o reduce gastos en otras categorías para compensar.");
         }
 
-        String titulo = riesgo ? "⚠️ Tu economía está en riesgo" : null;
+        titulo = riesgo ? "⚠️ Tu economía está en riesgo" : null;
         return new RiesgoDTO(riesgo, titulo, mensaje, recomendaciones);
     }
 
