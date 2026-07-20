@@ -90,12 +90,17 @@
     &__logout {
         display: flex;
         align-items: center;
-        gap: $spacing-sm;
+        gap: $spacing-xs;
         color: $color-text-light;
-        font-weight: 600;
+        font-weight: 500;
         cursor: pointer;
-        font-size: $font-size-sm;
+        font-size: $font-size-xs;
         transition: color 0.15s ease, transform 0.15s ease;
+
+        .icon {
+            width: 16px;
+            height: 16px;
+        }
 
         &:hover {
             color: $color-white;

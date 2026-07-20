@@ -18,11 +18,11 @@
     border-bottom: 1px solid rgba(166, 143, 235, 0.16);
     backdrop-filter: blur(18px);
 
-    &__brand,
     &__user {
         display: flex;
         align-items: center;
         gap: $spacing-sm;
+        margin-left: auto;
     }
 
     &__user-avatar {
@@ -32,21 +32,6 @@
         height: 34px;
         border-radius: 10px;
         font-weight: 800;
-    }
-
-    &__logo {
-        display: block;
-        width: 142px;
-        height: 46px;
-        object-fit: contain;
-        object-position: left center;
-    }
-
-    &__title {
-        font-size: $font-size-lg;
-        font-weight: 750;
-        color: rgba($color-white, 0.94);
-        letter-spacing: 0;
     }
 
     &__user-name {
