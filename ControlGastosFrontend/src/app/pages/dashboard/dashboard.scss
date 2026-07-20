@@ -2,306 +2,379 @@
 @use 'mixins' as *;
 
 .dashboard {
-    &__header {
-        margin-bottom: $spacing-xl;
+    max-width: 1180px;
+    margin: 0 auto;
 
-        h1 {
-            color: $color-text;
-            font-size: $font-size-xxl;
-            font-weight: 700;
-        }
+    &__header {
+    margin-bottom: $spacing-xl;
+    padding-bottom: $spacing-md;
+    border-bottom: 1px solid rgba(183, 166, 245, 0.1);
+
+    h1 {
+      color: $color-text;
+      font-size: clamp(1.7rem, 3vw, 2.25rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
     }
+  }
 
     &__eyebrow {
-        color: $color-primary-light;
-        font-size: $font-size-xs;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
+    color: #ba82f4;
+    font-size: $font-size-xs;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
 
-    &__loading {
-        @include card;
-        text-align: center;
-        color: $color-text-muted;
-        padding: $spacing-xl;
-    }
-
-    &__error {
-        padding: $spacing-sm $spacing-md;
-        border-radius: $border-radius-md;
-        font-weight: 600;
-        background: $color-gasto-light;
-        color: $color-gasto;
-        border: 1px solid rgba($color-gasto, 0.3);
-        margin-bottom: $spacing-md;
-    }
-
-    &__alertas {
-        display: flex;
-        flex-direction: column;
-        gap: $spacing-sm;
-        margin-bottom: $spacing-lg;
-    }
-
-    &__cards {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: $spacing-lg;
-        margin-bottom: $spacing-xl;
-
-        @include respond-to('lg') {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        @include respond-to('sm') {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    &__charts {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: $spacing-lg;
-        margin-bottom: $spacing-xl;
-
-        @include respond-to('md') {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    &__prediccion-detalle {
-        @include card;
-        margin-bottom: $spacing-xl;
-
-        h3 {
-            margin-bottom: $spacing-md;
-            font-weight: 600;
-        }
-    }
-
-    &__consejos {
-        @include card;
-        margin-top: $spacing-xl;
-
-        h3 {
-            margin-bottom: $spacing-lg;
-            font-size: $font-size-xl;
-            font-weight: 700;
-        }
-    }
-}
-
-// ─── Alerts ─────────────────────────────────────────────────────
-.alerta {
-    padding: $spacing-sm $spacing-md;
-    border-radius: $border-radius-md;
-    font-size: $font-size-sm;
-    font-weight: 600;
-    border: 1px solid;
-
-    &--peligro {
-        background: $color-gasto-light;
-        color: $color-gasto;
-        border-color: rgba($color-gasto, 0.3);
-    }
-
-    &--advertencia {
-        background: rgba($warning, 0.12);
-        color: $warning;
-        border-color: rgba($warning, 0.3);
-    }
-
-    &--info {
-        background: rgba($color-info, 0.12);
-        color: $color-info;
-        border-color: rgba($color-info, 0.3);
-    }
-}
-
-// ─── Iconos inline ─────────────────────────────────────────────
-.icon-inline {
-    display: inline-flex;
-    align-items: center;
-    vertical-align: middle;
-    line-height: 0;
-}
-
-// ─── Cards resumen ──────────────────────────────────────────────
-.card {
-    @include card;
-    text-align: left;
-    min-height: 120px;
-
-    &--ingreso .card__valor { color: $color-ingreso; }
-    &--gasto .card__valor,
-    &--negativo .card__valor { color: $color-gasto; }
-    &--positivo .card__valor,
-    &--prediccion .card__valor { color: $color-primary-light; }
-
-    &__label {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: $font-size-xs;
-        color: #FFFFFF;
-        margin-bottom: $spacing-sm;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    &__valor {
-        display: block;
-        font-size: clamp(1.3rem, 2.5vw, 1.8rem);
-        font-weight: 700;
-    }
-}
-
-// ─── Charts ─────────────────────────────────────────────────────
-.chart-box {
+  &__loading {
     @include card;
     text-align: center;
-    min-height: 340px;
+    color: $color-text-light;
+    padding: $spacing-xl;
+  }
 
-    h3 {
-        font-size: $font-size-md;
-        color: $color-text;
-        margin-bottom: $spacing-md;
-        font-weight: 600;
-    }
+  &__error {
+    padding: $spacing-sm $spacing-md;
+    border-radius: $border-radius-md;
+    font-weight: 650;
+    background: $color-gasto-light;
+    color: $color-gasto;
+    border: 1px solid rgba($color-gasto, 0.32);
+  }
 
-    canvas {
-        max-height: 250px;
-        max-width: 100%;
-    }
+  &__alertas {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-lg;
+  }
 
-    &--full {
-        grid-column: 1 / -1;
-
-        canvas {
-            max-height: 300px;
-        }
-    }
-}
-
-// ─── Predicción ─────────────────────────────────────────────────
-.pred-grid {
+    &__cards {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: $spacing-md;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: $spacing-xl;
+
+    @include respond-to('lg') {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include respond-to('sm') {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-xl;
 
     @include respond-to('md') {
-        grid-template-columns: 1fr;
+      grid-template-columns: 1fr;
     }
+  }
+
+  &__prediccion-detalle {
+    @include card;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-xl;
+
+    h3 {
+      margin-bottom: $spacing-md;
+    }
+  }
+}
+
+.alerta {
+  padding: $spacing-sm $spacing-md;
+  border-radius: $border-radius-md;
+  font-size: $font-size-sm;
+  font-weight: 650;
+  border: 1px solid;
+
+  &--peligro {
+    background: $color-gasto-light;
+    color: $color-gasto;
+    border-color: rgba($color-gasto, 0.32);
+  }
+
+  &--advertencia {
+    background: rgba($warning, 0.12);
+    color: #facc15;
+    border-color: rgba($warning, 0.34);
+  }
+
+  &--info {
+    background: rgba($color-primary, 0.12);
+    color: $color-primary;
+    border-color: rgba($color-primary, 0.34);
+  }
+}
+
+.card {
+  @include card;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  text-align: left;
+  min-height: 138px;
+  padding: 20px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    width: 100px;
+    height: 100px;
+    right: -34px;
+    bottom: -44px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--card-glow, rgba(119, 117, 244, 0.32)), transparent 67%);
+    filter: blur(3px);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    right: 16px;
+    bottom: 16px;
+    width: 76px;
+    height: 25px;
+    opacity: 0.62;
+    background: linear-gradient(140deg, transparent 0 21%, var(--spark-color, #8179f7) 23% 37%, transparent 39% 46%, var(--spark-color, #8179f7) 48% 63%, transparent 65% 72%, var(--spark-color, #8179f7) 74%);
+    clip-path: polygon(0 80%, 13% 46%, 26% 65%, 41% 20%, 58% 55%, 74% 4%, 100% 42%, 100% 100%, 0 100%);
+  }
+
+  &--ingreso {
+    --card-glow: rgba(94, 200, 255, 0.28);
+    --spark-color: #5ec8ff;
+    border-color: rgba($color-ingreso, 0.34);
+
+    .card__valor {
+      color: $color-ingreso;
+    }
+  }
+
+  &--gasto,
+  &--negativo {
+    --card-glow: rgba(200, 125, 255, 0.3);
+    --spark-color: #c87dff;
+    border-color: rgba($color-gasto, 0.34);
+
+    .card__valor {
+      color: $color-gasto;
+    }
+  }
+
+  &--positivo,
+  &--prediccion {
+    --card-glow: rgba(154, 99, 236, 0.34);
+    --spark-color: #74c9ff;
+    border-color: rgba($color-primary, 0.34);
+
+    .card__valor {
+      color: $color-primary;
+    }
+  }
+
+  &__label {
+    display: block;
+    font-size: $font-size-xs;
+    color: $color-text-light;
+    margin-bottom: 12px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  &__valor {
+    display: block;
+    font-size: clamp(1.35rem, 2vw, 1.85rem);
+    font-weight: 850;
+    overflow-wrap: anywhere;
+    text-shadow: 0 0 18px currentColor;
+  }
+}
+
+.chart-box {
+  @include card;
+  padding: 20px;
+  text-align: left;
+  min-height: 350px;
+
+  h3 {
+    font-size: $font-size-md;
+    color: $color-text;
+    margin-bottom: 18px;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+  }
+
+  canvas {
+    max-height: 250px;
+    max-width: 100%;
+  }
+
+  &--full {
+    grid-column: 1 / -1;
+
+    canvas {
+      max-height: 300px;
+    }
+  }
+}
+
+.pred-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: $spacing-md;
+
+  @include respond-to('md') {
+    grid-template-columns: 1fr;
+  }
 }
 
 .pred-item {
-    padding: $spacing-md;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: $border-radius-md;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 18px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(117, 95, 221, 0.05));
+  border-radius: $border-radius-lg;
+  border: 1px solid rgba(173, 151, 235, 0.14);
 }
 
 .pred-label {
-    display: block;
-    font-size: $font-size-xs;
-    color: #FFFFFF;
-    margin-bottom: $spacing-xs;
-    font-weight: 600;
+  display: block;
+  font-size: $font-size-xs;
+  color: $color-text-light;
+  margin-bottom: $spacing-xs;
+  font-weight: 700;
 }
 
 .pred-valor {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: $font-size-lg;
-    font-weight: 700;
-    color: #FFFFFF;
+  display: block;
+  font-size: $font-size-lg;
+  font-weight: 800;
+  color: $color-text;
 }
 
-// ─── Consejos ───────────────────────────────────────────────────
-.consejos-grid {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-md;
+.pred-tendencia {
+  font-size: $font-size-md;
 }
 
-.consejo {
-    position: relative;
-    padding: $spacing-lg;
-    border-radius: $border-radius-xl;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    background: rgba(255, 255, 255, 0.02);
-    transition: all 0.25s ease;
-
-    &:hover {
-        transform: translateY(-2px);
-        border-color: rgba(124, 58, 237, 0.15);
-    }
-
-    &::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 4px;
-        height: 100%;
-        border-radius: 0 4px 4px 0;
-    }
-
-    &__header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: $spacing-sm;
-    }
-
-    &__titulo {
-        display: flex;
-        align-items: center;
-        gap: $spacing-sm;
-    }
-
-    &__icono {
-        display: flex;
-        align-items: center;
-        width: 24px;
-        height: 24px;
-    }
-
-    h4 {
-        margin: 0;
-        font-size: $font-size-md;
-        font-weight: 600;
-    }
-
-    small {
-        color: $color-text-muted;
-        font-size: $font-size-xs;
-    }
-
-    p {
-        margin: 0;
-        color: $color-text-light;
-        line-height: 1.6;
-        font-size: $font-size-sm;
-    }
-
-    &--success::before { background: $color-ingreso; }
-    &--warning::before { background: $warning; }
-    &--danger::before { background: $color-gasto; }
-    &--info::before { background: $color-info; }
+.dashboard__consejos{
+    @include card;
+    margin-top:$spacing-xl;
+    padding:$spacing-xl;
 }
 
-.badge {
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
+.dashboard__consejos h3{
+    margin-bottom:25px;
+    font-size:24px;
+    font-weight:800;
+}
 
-    &--success { background: rgba($color-ingreso, 0.15); color: $color-ingreso; }
-    &--warning { background: rgba($warning, 0.15); color: $warning; }
-    &--danger { background: rgba($color-gasto, 0.15); color: $color-gasto; }
-    &--info { background: rgba($color-info, 0.15); color: $color-info; }
+.consejos-grid{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.consejo{
+    position:relative;
+    padding:22px;
+    border-radius:16px;
+    transition:.25s;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.consejo:hover{
+    transform:translateY(-3px);
+}
+
+.consejo::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    width:6px;
+    height:100%;
+    border-radius:20px;
+}
+
+.consejo__header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
+}
+
+.consejo__titulo{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.consejo__icono{
+    font-size:28px;
+}
+
+.consejo h4{
+    margin:0;
+    font-size:20px;
+    font-weight:700;
+}
+
+.consejo small{
+    color:$color-text-light;
+    font-size:13px;
+}
+
+.consejo p{
+    margin:0;
+    color:$color-text-light;
+    line-height:1.7;
+}
+
+.badge{
+    padding:6px 12px;
+    border-radius:30px;
+    font-size:12px;
+    font-weight:700;
+    text-transform:capitalize;
+}
+
+.consejo--success::before{
+    background:#5ec8ff;
+}
+
+.badge--success{
+    background:rgba(94, 200, 255, .14);
+    color:#5ec8ff;
+}
+
+.consejo--warning::before{
+    background:#a98bff;
+}
+
+.badge--warning{
+    background:rgba(169, 139, 255, .14);
+    color:#a98bff;
+}
+
+.consejo--danger::before{
+    background:#c87dff;
+}
+
+.badge--danger{
+    background:rgba(200, 125, 255, .14);
+    color:#c87dff;
+}
+
+.consejo--info::before{
+    background:#7987ff;
+}
+
+.badge--info{
+    background:rgba(121, 135, 255, .14);
+    color:#9eabff;
 }

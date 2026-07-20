@@ -1,143 +1,100 @@
 @use 'variables' as *;
+@use 'mixins' as *;
 
 .sidebar {
     position: fixed;
-    top: 0;
+    top: $header-height;
     left: 0;
     bottom: 0;
     width: $sidebar-width;
-    background: $color-sidebar;
-    border-right: 1px solid $color-border;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    padding: $spacing-lg 0;
+    color: rgba($color-white, 0.95);
+    padding: $spacing-md 0;
+    z-index: 900;
     overflow-y: auto;
-
-    &__logo {
-        display: flex;
-        align-items: center;
-        gap: $spacing-sm;
-        padding: 0 $spacing-lg;
-        margin-bottom: $spacing-xl;
-    }
-
-    &__logo-icon {
-        width: 36px;
-        height: 36px;
-        display: grid;
-        place-items: center;
-        background: $gradient-accent;
-        border-radius: 10px;
-        font-size: 18px;
-    }
-
-    &__logo-text {
-        font-size: $font-size-lg;
-        font-weight: 700;
-        color: $color-white;
-    }
+    background: linear-gradient(180deg, rgba(22, 17, 51, 0.98), rgba(12, 10, 31, 0.94));
+    border-right: 1px solid rgba(166, 143, 235, 0.16);
+    box-shadow: 18px 0 60px rgba(0, 0, 0, 0.22);
+    backdrop-filter: blur(18px);
 
     .nav-list {
         display: flex;
         flex-direction: column;
-        gap: 4px;
-        padding: 0 $spacing-sm;
-        flex: 1;
+        gap: $spacing-xs;
+        padding: $spacing-md;
 
-        li a {
+        a {
+            position: relative;
             display: flex;
             align-items: center;
             gap: $spacing-sm;
-            padding: 12px $spacing-md;
+            min-height: 44px;
+            padding: $spacing-sm $spacing-md;
             border-radius: $border-radius-md;
             color: $color-text-light;
-            font-weight: 500;
-            font-size: $font-size-sm;
-            transition: all 0.2s ease;
-            position: relative;
+            font-weight: 650;
+            transition: color 0.18s ease, background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
 
-            .icon {
-                width: 20px;
-                height: 20px;
-                flex-shrink: 0;
-                color: $color-text-muted;
-                transition: color 0.2s ease;
+            span {
+                width: 24px;
+                height: 24px;
+                display: grid;
+                place-items: center;
+                color: $color-primary;
             }
 
-            &:hover {
-                color: $color-white;
-                background: rgba(255, 255, 255, 0.04);
-
-                .icon { color: $color-primary-light; }
-            }
-
+            &:hover,
             &.active {
                 color: $color-white;
-                background: rgba(124, 58, 237, 0.15);
-
-                .icon { color: $color-primary-light; }
-
-                &::before {
-                    content: '';
-                    position: absolute;
-                    left: -8px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    width: 3px;
-                    height: 20px;
-                    background: $color-primary-light;
-                    border-radius: 0 3px 3px 0;
-                }
+                background: linear-gradient(90deg, rgba(141, 92, 230, 0.24), rgba(98, 200, 255, 0.1));
+                box-shadow: inset 3px 0 0 $color-primary;
+                transform: translateX(3px);
             }
-        }
-
-        &__divider {
-            height: 1px;
-            background: $color-border;
-            margin: $spacing-sm $spacing-md;
         }
 
         &__new {
-            background: $gradient-accent !important;
+            margin-top: $spacing-md;
+            justify-content: center;
             color: $color-white !important;
-            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.25);
+            background-image: $gradient-accent !important;
+            box-shadow: 0 14px 34px rgba(128, 111, 245, 0.26) !important;
 
-            .icon { color: $color-white !important; }
-
-            &:hover {
-                filter: brightness(1.1);
-                transform: translateY(-1px);
+            span {
+                color: $color-white !important;
             }
         }
     }
 
     &__footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
         padding: $spacing-md $spacing-lg;
-        border-top: 1px solid $color-border;
-        margin-top: auto;
+        border-top: 1px solid rgba(166, 143, 235, 0.12);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
     }
 
     &__logout {
         display: flex;
         align-items: center;
         gap: $spacing-sm;
-        color: $color-text-muted;
-        font-size: $font-size-sm;
-        font-weight: 500;
+        color: $color-text-light;
+        font-weight: 600;
         cursor: pointer;
-        padding: 8px $spacing-sm;
-        border-radius: $border-radius-md;
-        transition: all 0.2s ease;
-
-        .icon {
-            width: 18px;
-            height: 18px;
-        }
+        font-size: $font-size-sm;
+        transition: color 0.15s ease, transform 0.15s ease;
 
         &:hover {
-            color: $color-gasto;
-            background: rgba(239, 68, 68, 0.08);
+            color: $color-white;
+            transform: translateX(4px);
+        }
+    }
+
+    @include respond-to('md') {
+        transform: translateX(-100%);
+
+        &.sidebar--open {
+            transform: translateX(0);
         }
     }
 }

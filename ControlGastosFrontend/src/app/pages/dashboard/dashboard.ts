@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Chart, registerables } from 'chart.js';
 import { AnalyticsService, DashboardData, Presupuesto } from '../../services/analytics.service';
 
@@ -24,27 +23,11 @@ export class DashboardComponent implements OnInit {
   alertas: { tipo: string; mensaje: string }[] = [];
 
   meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-  colores = ['#38BDF8', '#A855F7', '#7C3AED', '#22D3EE', '#8B5CF6', '#67E8F9', '#C084FC', '#2DD4BF'];
+  colores = ['#9d65ed', '#5ec8ff', '#536ce1', '#bd63e8', '#7b78f5', '#7aa8ff', '#c87dff', '#6d8cff'];
+  private readonly chartText = '#b9b5d2';
+  private readonly chartGrid = 'rgba(183, 166, 245, 0.10)';
 
-  private emojiMap: Record<string, string> = {
-    '💰': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#38BDF8" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M8 10h6a2 2 0 010 4h-3"/></svg>',
-    '📈': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#38BDF8" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>',
-    '⚠️': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#F97316" stroke-width="2"><path d="M12 2L2 22h20L12 2z"/><line x1="12" y1="10" x2="12" y2="14"/><circle cx="12" cy="18" r="0.5" fill="#F97316"/></svg>',
-    '🚨': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#E53935" stroke-width="2"><path d="M12 2a10 10 0 00-10 10v10h20V12A10 10 0 0012 2z"/><circle cx="12" cy="15" r="1" fill="#E53935"/><line x1="12" y1="9" x2="12" y2="12"/></svg>',
-    '🎯': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#A855F7" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="#A855F7"/></svg>',
-    '📉': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#E53935" stroke-width="2"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg>',
-    '💡': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#FBBF24" stroke-width="2"><path d="M12 18v-4a4 4 0 10-4-4c0 2 1.5 3.5 3 4.5V18"/><path d="M9 18h6"/></svg>',
-    '🛑': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#E53935" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="8" y1="12" x2="16" y2="12"/></svg>',
-    '✅': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#38BDF8" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>',
-    '🔥': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#F97316" stroke-width="2"><path d="M12 23c-5 0-9-3-9-8 0-5 4-10 9-14 5 4 9 9 9 14 0 5-4 8-9 8z"/><line x1="12" y1="16" x2="12" y2="11"/></svg>',
-    '😬': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#E53935" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="#E53935"/></svg>',
-  };
-
-  getSvgIcon(emoji: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(this.emojiMap[emoji] || '');
-  }
-
-  constructor(private service: AnalyticsService, private cdr: ChangeDetectorRef, private sanitizer: DomSanitizer) {}
+  constructor(private service: AnalyticsService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.service.getDashboard().subscribe({
@@ -104,23 +87,17 @@ export class DashboardComponent implements OnInit {
         datasets: [{
           data: categorias.map(([, v]) => v),
           backgroundColor: this.colores.slice(0, categorias.length),
-          borderWidth: 2, borderColor: '#1A2238'
+          borderWidth: 3, borderColor: '#171037'
         }]
       },
       options: {
         responsive: true,
         animation: { animateRotate: true, duration: 1000 },
+        cutout: '67%',
         plugins: {
           legend: {
             position: 'bottom',
-            labels: { color: '#FFFFFF', font: { size: 12 } }
-          },
-          tooltip: {
-            bodyColor: '#FFFFFF',
-            titleColor: '#A7B1C2',
-            backgroundColor: '#1A2238',
-            borderColor: '#2A344A',
-            borderWidth: 1
+            labels: { color: this.chartText, font: { size: 12, weight: 600 }, padding: 16, usePointStyle: true }
           }
         }
       }
@@ -140,20 +117,23 @@ export class DashboardComponent implements OnInit {
           label: 'Gastos',
           data: categorias.map(([, v]) => v),
           backgroundColor: this.colores.slice(0, categorias.length),
-          borderRadius: 6
+          borderRadius: 8,
+          borderSkipped: false
         }]
       },
       options: {
         responsive: true,
         animation: { duration: 800, easing: 'easeOutBounce' },
         scales: {
-          x: { ticks: { color: '#A7B1C2' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-          y: { beginAtZero: true, ticks: { color: '#A7B1C2', callback: v => 'S/ ' + v }, grid: { color: 'rgba(255,255,255,0.05)' } }
+          x: { ticks: { color: this.chartText }, grid: { display: false }, border: { display: false } },
+          y: {
+            beginAtZero: true,
+            ticks: { color: this.chartText, callback: v => 'S/ ' + v },
+            grid: { color: this.chartGrid },
+            border: { display: false }
+          }
         },
-        plugins: {
-          legend: { display: false },
-          tooltip: { bodyColor: '#FFFFFF', titleColor: '#A7B1C2', backgroundColor: '#1A2238', borderColor: '#2A344A', borderWidth: 1 }
-        }
+        plugins: { legend: { display: false } }
       }
     });
   }
@@ -176,8 +156,8 @@ export class DashboardComponent implements OnInit {
           {
             label: 'Ingresos',
             data: ingresosData,
-            borderColor: '#38BDF8',
-            backgroundColor: 'rgba(56, 189, 248, 0.1)',
+            borderColor: '#5ec8ff',
+            backgroundColor: 'rgba(94, 200, 255, 0.12)',
             fill: true,
             tension: 0.4,
             pointRadius: 4
@@ -185,8 +165,8 @@ export class DashboardComponent implements OnInit {
           {
             label: 'Gastos',
             data: gastosData,
-            borderColor: '#A855F7',
-            backgroundColor: 'rgba(168, 85, 247, 0.1)',
+            borderColor: '#a36bf2',
+            backgroundColor: 'rgba(163, 107, 242, 0.16)',
             fill: true,
             tension: 0.4,
             pointRadius: 4
@@ -198,12 +178,13 @@ export class DashboardComponent implements OnInit {
         animation: { duration: 1200, easing: 'easeInOutQuart' },
         interaction: { mode: 'index', intersect: false },
         scales: {
-          x: { ticks: { color: '#A7B1C2' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-          y: { beginAtZero: true, ticks: { color: '#A7B1C2', callback: v => 'S/ ' + v }, grid: { color: 'rgba(255,255,255,0.05)' } }
-        },
-        plugins: {
-          legend: { labels: { color: '#FFFFFF', font: { size: 12 } } },
-          tooltip: { bodyColor: '#FFFFFF', titleColor: '#A7B1C2', backgroundColor: '#1A2238', borderColor: '#2A344A', borderWidth: 1 }
+          x: { ticks: { color: this.chartText }, grid: { color: this.chartGrid }, border: { display: false } },
+          y: {
+            beginAtZero: true,
+            ticks: { color: this.chartText, callback: v => 'S/ ' + v },
+            grid: { color: this.chartGrid },
+            border: { display: false }
+          }
         }
       }
     });

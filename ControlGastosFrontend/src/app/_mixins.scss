@@ -1,113 +1,89 @@
 @use 'variables' as *;
 
-// ─── Botón base ─────────────────────────────────────────────────
+// Mixin para botones
 @mixin btn-base {
     border: none;
-    border-radius: $border-radius-lg;
+    border-radius: $border-radius-md;
     cursor: pointer;
     font-family: $font-family;
     font-size: $font-size-sm;
     font-weight: 600;
-    padding: 12px 24px;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+    padding: $spacing-sm $spacing-md;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease, border-color 0.18s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: $spacing-xs;
-    min-height: 44px;
-    line-height: 1;
+    min-height: 40px;
 
-    &:hover:not(:disabled) {
+    &:hover {
         transform: translateY(-2px);
+        box-shadow: $shadow-sm;
     }
 
-    &:active:not(:disabled) {
+    &:active {
         transform: translateY(-1px);
     }
 
     &:disabled {
-        opacity: 0.5;
+        opacity: 0.6;
         cursor: not-allowed;
         transform: none;
         box-shadow: none;
     }
 }
 
-// ─── Botón primario ─────────────────────────────────────────────
 @mixin btn-primary {
     @include btn-base;
-    background: $gradient-accent;
+    background-image: $gradient-accent;
     color: $color-white;
-    box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 12px 30px rgba(128, 111, 245, 0.28);
 
     &:hover:not(:disabled) {
-        filter: brightness(1.1);
-        box-shadow: 0 12px 35px rgba(124, 58, 237, 0.4);
+        filter: brightness(1.06);
     }
 }
 
-// ─── Botón secundario ───────────────────────────────────────────
-@mixin btn-secondary {
-    @include btn-base;
-    background: transparent;
-    color: $color-text;
-    border: 1px solid $color-border;
-
-    &:hover:not(:disabled) {
-        background: rgba(255, 255, 255, 0.06);
-        border-color: rgba(255, 255, 255, 0.15);
-    }
-}
-
-// ─── Botón ingreso ──────────────────────────────────────────────
 @mixin btn-ingreso {
     @include btn-base;
-    background: $color-ingreso;
+    background-color: $color-ingreso;
     color: $color-white;
-    box-shadow: 0 8px 25px rgba(34, 197, 94, 0.25);
 }
 
-// ─── Botón gasto ────────────────────────────────────────────────
 @mixin btn-gasto {
     @include btn-base;
-    background: $color-gasto;
+    background-color: $color-gasto;
     color: $color-white;
-    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.25);
 }
 
-// ─── Botón pequeño ──────────────────────────────────────────────
-@mixin btn-small {
-    @include btn-base;
-    padding: 8px 16px;
-    font-size: $font-size-xs;
-    min-height: 34px;
-}
-
-// ─── Card ───────────────────────────────────────────────────────
+// Mixin para tarjetas
 @mixin card {
     background: $gradient-panel;
     border: 1px solid $color-border;
     border-radius: $border-radius-xl;
-    box-shadow: $shadow-sm;
+    box-shadow: 0 14px 34px rgba(2, 1, 16, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.035);
     padding: $spacing-lg;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    backdrop-filter: blur(18px);
+    transition: box-shadow 0.25s ease, transform 0.2s ease, border-color 0.2s ease;
 
     &:hover {
-        box-shadow: $shadow-md;
-        border-color: rgba(124, 58, 237, 0.2);
+        box-shadow: 0 20px 48px rgba(2, 1, 16, 0.48), 0 0 0 1px rgba(137, 103, 238, 0.16);
+        border-color: rgba(137, 103, 238, 0.36);
+        transform: translateY(-2px);
     }
 }
 
-// ─── Input ──────────────────────────────────────────────────────
+// Mixin para inputs
 @mixin input {
     border: 1px solid $color-border;
     border-radius: $border-radius-md;
     font-family: $font-family;
-    font-size: $font-size-sm;
-    padding: 12px 16px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    font-size: $font-size-md;
+    padding: $spacing-sm $spacing-md;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
     width: 100%;
-    background: $color-bg-dark;
+    background: rgba(8, 7, 24, 0.68);
     color: $color-text;
 
     &::placeholder {
@@ -117,25 +93,12 @@
     &:focus {
         border-color: $color-primary;
         outline: none;
-        background: rgba(11, 16, 32, 0.95);
-        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15), 0 8px 25px rgba(124, 58, 237, 0.08);
+        background: rgba(13, 11, 35, 0.96);
+        box-shadow: 0 0 0 3px rgba(98, 200, 255, 0.13), 0 10px 30px rgba(98, 200, 255, 0.08);
     }
 }
 
-// ─── Badge tipo ─────────────────────────────────────────────────
-@mixin tipo-badge($bg-color, $text-color) {
-    background-color: $bg-color;
-    color: $text-color;
-    border-radius: 20px;
-    font-size: $font-size-xs;
-    font-weight: 700;
-    padding: 4px 12px;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-
-// ─── Responsive ─────────────────────────────────────────────────
+// Mixin para responsive
 @mixin respond-to($breakpoint) {
     @if $breakpoint == 'sm' {
         @media (max-width: 576px) { @content; }
@@ -144,4 +107,28 @@
     } @else if $breakpoint == 'lg' {
         @media (max-width: 992px) { @content; }
     }
+}
+
+// Mixin para tarjetas (alias español)
+@mixin tarjeta {
+    @include card;
+}
+
+// Mixin para botón pequeño
+@mixin btn-small {
+    @include btn-base;
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-xs;
+}
+
+// Mixin para etiquetas de tipo
+@mixin tipo-badge($bg-color, $text-color) {
+    background-color: $bg-color;
+    color: $text-color;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-xs;
+    font-weight: 700;
+    padding: 4px $spacing-sm;
+    text-transform: uppercase;
+    box-shadow: 0 4px 12px rgba(15,23,36,0.03);
 }
