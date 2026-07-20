@@ -3,67 +3,28 @@
 
 .app-layout {
     display: flex;
-    flex-direction: column;
     min-height: 100vh;
-    background: $gradient-page;
+    background: $color-bg;
 }
 
-.app-body {
-    display: flex;
+.app-main {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-left: $sidebar-width;
+    min-height: 100vh;
 }
 
 .app-content {
     flex: 1;
-    padding: $spacing-xl;
-    margin-left: $sidebar-width;
-    margin-top: $header-height;
-    min-height: calc(100vh - $header-height);
-    background:
-        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-        $gradient-page;
-    background-size: 42px 42px, 42px 42px, auto;
-
-    .app-content__inner {
-        max-width: $content-max-width;
-        margin: 0 auto;
-        padding: $spacing-lg;
-    }
-
-    @include respond-to('md') {
-        margin-left: 0;
-        padding: $spacing-md;
-        .app-content__inner { padding: $spacing-md; }
-    }
+    padding: $spacing-lg $spacing-xl;
+    max-width: $content-max-width;
+    width: 100%;
+    margin: 0 auto;
+    animation: fadeIn 0.3s ease;
 }
 
-/* Global utilities to make content look like the screenshot */
-.panel {
-    @include card;
-}
-
-.page-title {
-    font-size: $font-size-xxl;
-    font-weight: 700;
-    color: $color-text;
-    margin-bottom: $spacing-md;
-}
-
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: 1fr 360px;
-    gap: $spacing-lg;
-}
-
-.cards-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: $spacing-md;
-    margin-bottom: $spacing-lg;
-}
-
-.table-card {
-    @include card;
-    overflow: hidden;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
 }

@@ -1,62 +1,99 @@
 @use 'variables' as *;
-@use 'mixins' as *;
 
 .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
     height: $header-height;
-    background: rgba(9, 16, 29, 0.88);
-    color: $color-white;
+    background: $color-navbar;
+    border-bottom: 1px solid $color-border;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 $spacing-lg;
-    z-index: 1000;
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.28);
-    border-bottom: 1px solid rgba(151, 188, 226, 0.14);
-    backdrop-filter: blur(18px);
+    padding: 0 $spacing-xl;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 
-    &__brand,
+    &__left {
+        display: flex;
+        align-items: center;
+    }
+
+    &__greeting {
+        font-size: $font-size-md;
+        font-weight: 600;
+        color: $color-text;
+    }
+
+    &__right {
+        display: flex;
+        align-items: center;
+        gap: $spacing-md;
+    }
+
+    &__notif-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        border: 1px solid $color-border;
+        background: transparent;
+        color: $color-text-muted;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: $color-text;
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+    }
+
     &__user {
         display: flex;
         align-items: center;
         gap: $spacing-sm;
+        padding: 6px 12px 6px 6px;
+        border-radius: $border-radius-md;
+        cursor: pointer;
+        transition: background 0.2s ease;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
     }
 
-    &__logo,
     &__user-avatar {
-        display: grid;
-        place-items: center;
         width: 34px;
         height: 34px;
         border-radius: 10px;
-        font-weight: 800;
+        background: $gradient-accent;
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        font-size: $font-size-sm;
+        color: $color-white;
     }
 
-    &__logo {
-        color: #102033;
-        background: linear-gradient(135deg, $accent-3, #fef3c7);
-        box-shadow: 0 0 22px rgba(251, 191, 36, 0.35);
-    }
-
-    &__title {
-        font-size: $font-size-lg;
-        font-weight: 750;
-        color: rgba($color-white, 0.94);
-        letter-spacing: 0;
+    &__user-info {
+        display: flex;
+        flex-direction: column;
     }
 
     &__user-name {
+        font-size: $font-size-sm;
         font-weight: 600;
-        color: $color-text-light;
+        color: $color-text;
+        line-height: 1.2;
     }
 
-    &__user-avatar {
-        border-radius: 50%;
-        color: $color-white;
-        background: linear-gradient(135deg, $accent-1, $color-primary);
-        box-shadow: 0 0 22px rgba(34, 211, 238, 0.28);
+    &__user-role {
+        font-size: 11px;
+        color: $color-text-muted;
+        line-height: 1.2;
     }
 }

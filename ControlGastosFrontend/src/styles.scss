@@ -12,7 +12,9 @@ html, body {
     font-family: $font-family;
     font-size: $font-size-md;
     color: $color-text;
-    background: $gradient-page;
+    background: $color-bg;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -33,6 +35,24 @@ button, input, select, textarea {
 }
 
 ::selection {
-    background: rgba(34, 211, 238, 0.28);
+    background: rgba(124, 58, 237, 0.3);
     color: $color-white;
+}
+
+// Scrollbar personalizada
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: $color-border;
+    border-radius: 3px;
+
+    &:hover {
+        background: $color-text-muted;
+    }
 }

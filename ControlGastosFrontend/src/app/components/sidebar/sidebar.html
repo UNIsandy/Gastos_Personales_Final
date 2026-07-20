@@ -1,12 +1,35 @@
 <nav class="sidebar">
+    <div class="sidebar__logo">
+        <div class="sidebar__logo-icon">💰</div>
+        <span class="sidebar__logo-text">GastosApp</span>
+    </div>
     <ul class="nav-list">
-        <li><a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"><span>⌂</span>Inicio</a></li>
-        <li><a routerLink="/dashboard" routerLinkActive="active"><span>◇</span>Resumen</a></li>
-        <li><a routerLink="/lista" routerLinkActive="active"><span>≡</span>Historial</a></li>
-        <li><a routerLink="/metas" routerLinkActive="active"><span>◎</span>Metas</a></li>
-        <li><a routerLink="/formulario" routerLinkActive="active" class="nav-list__new"><span>+</span>Nuevo</a></li>
+        <li><a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Inicio</span>
+        </a></li>
+        <li><a routerLink="/dashboard" routerLinkActive="active">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Dashboard</span>
+        </a></li>
+        <li><a routerLink="/lista" routerLinkActive="active">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            <span>Historial</span>
+        </a></li>
+        <li><a routerLink="/metas" routerLinkActive="active">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            <span>Metas</span>
+        </a></li>
+        <li class="nav-list__divider"></li>
+        <li><a routerLink="/formulario" routerLinkActive="active" class="nav-list__new">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>Nueva Transacción</span>
+        </a></li>
     </ul>
     <div class="sidebar__footer">
-        <a (click)="logout()" class="sidebar__logout">Cerrar sesión</a>
+        <a (click)="logout()" class="sidebar__logout">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Cerrar sesión</span>
+        </a>
     </div>
 </nav>

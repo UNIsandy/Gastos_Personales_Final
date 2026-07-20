@@ -32,7 +32,7 @@
 }
 
 .nivel-global {
-    @include tarjeta;
+    @include card;
     display: flex;
     align-items: center;
     gap: $spacing-lg;
@@ -51,7 +51,7 @@
 
     &.bronce {
         background: rgba(251, 191, 36, 0.14);
-        color: $accent-3;
+        color: $warning;
         border-color: rgba(251, 191, 36, 0.32);
     }
 
@@ -106,7 +106,7 @@
 }
 
 .form-meta {
-    @include tarjeta;
+    @include card;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: $spacing-md;
@@ -183,7 +183,7 @@
 }
 
 .meta-card {
-    @include tarjeta;
+    @include card;
     padding: $spacing-lg;
 
     &.completada {
