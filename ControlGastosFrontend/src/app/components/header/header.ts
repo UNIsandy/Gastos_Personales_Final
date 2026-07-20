@@ -17,7 +17,7 @@ export class HeaderComponent implements OnInit {
     const data = localStorage.getItem('user_data');
     if (data) {
       const u = JSON.parse(data);
-      this.nombre = u.nombre || u.email || 'Usuario';
+      this.nombre = u.nombre || (u.email ? u.email.split('@')[0] : 'Usuario');
       this.inicial = this.nombre.charAt(0).toUpperCase();
     }
   }
