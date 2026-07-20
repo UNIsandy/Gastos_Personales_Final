@@ -30,7 +30,7 @@
         <span class="card__valor">{{ data.balance >= 0 ? '+' : '' }}S/ {{ data.balance.toFixed(2) }}</span>
       </div>
       <div class="card card--prediccion">
-        <span class="card__label">{{ data.tendencia }} Pronóstico próximo mes</span>
+        <span class="card__label"><span class="icon-inline" [innerHTML]="getSvgIcon(data.tendencia)"></span> Pronóstico próximo mes</span>
         <span class="card__valor">S/ {{ data.prediccionProximoMes.toFixed(2) }}</span>
       </div>
     </section>
@@ -63,7 +63,8 @@
         </div>
         <div class="pred-item">
           <span class="pred-label">Tendencia</span>
-          <span class="pred-valor pred-tendencia">{{ data.tendencia }}
+          <span class="pred-valor pred-tendencia">
+            <span class="icon-inline" [innerHTML]="getSvgIcon(data.tendencia)"></span>
             @if (data.tendencia === '✅') { Todo estable }
             @else if (data.tendencia === '🔥') { Gastando más de lo previsto }
             @else { Cuidado, se espera aumento }
@@ -75,15 +76,13 @@
 
   @if (data?.consejos?.length) {
   <section class="dashboard__consejos">
-      <h3>💡 Recomendaciones Personalizadas</h3>
+      <h3><span class="icon-inline" [innerHTML]="getSvgIcon('💡')"></span> Recomendaciones Personalizadas</h3>
       <div class="consejos-grid">
           @for (c of data!.consejos; track c.titulo) {
             <div class="consejo consejo--{{c.tipo}}">
               <div class="consejo__header">
                 <div class="consejo__titulo">
-                    <span class="consejo__icono">
-                        {{ c.icono }}
-                    </span>
+                    <span class="consejo__icono" [innerHTML]="getSvgIcon(c.icono)"></span>
                     <div>
                         <h4>{{ c.titulo }}</h4>
                         <small>
