@@ -16,20 +16,7 @@
     box-shadow: 18px 0 60px rgba(0, 0, 0, 0.22);
     backdrop-filter: blur(18px);
 
-    &__logo {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: $spacing-lg $spacing-md;
-    }
-
-    &__logo-img {
-        height: 36px;
-        width: auto;
-    }
-
-    &__logo-text { display: none; }
-    &__logo-icon { display: none; }
+    &__logo { display: none; }
 
     .nav-list {
         display: flex;
@@ -94,12 +81,12 @@
         color: $color-text-light;
         font-weight: 500;
         cursor: pointer;
-        font-size: $font-size-xs;
+        font-size: $font-size-sm;
         transition: color 0.15s ease, transform 0.15s ease;
 
         .icon {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
         }
 
         &:hover {

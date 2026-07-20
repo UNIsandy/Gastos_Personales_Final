@@ -18,11 +18,23 @@
     border-bottom: 1px solid rgba(166, 143, 235, 0.16);
     backdrop-filter: blur(18px);
 
+    &__brand,
     &__user {
         display: flex;
         align-items: center;
         gap: $spacing-sm;
+    }
+
+    &__user {
         margin-left: auto;
+    }
+
+    &__logo {
+        display: block;
+        width: 142px;
+        height: 46px;
+        object-fit: contain;
+        object-position: left center;
     }
 
     &__user-avatar {
