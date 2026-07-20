@@ -118,6 +118,10 @@
         min-height: 42px;
     }
 
+    @include respond-to('md') {
+        grid-template-columns: 1fr;
+    }
+
     &__campo {
         display: flex;
         flex-direction: column;
@@ -146,6 +150,10 @@
     display: flex;
     gap: $spacing-xs;
     margin-bottom: $spacing-lg;
+
+    @include respond-to('sm') {
+        flex-wrap: wrap;
+    }
 }
 
 .tab {
@@ -256,6 +264,10 @@
         input {
             @include input;
             font-size: $font-size-sm;
+        }
+
+        @include respond-to('sm') {
+            flex-direction: column;
         }
     }
 }

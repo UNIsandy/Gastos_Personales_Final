@@ -49,6 +49,10 @@
     &__user-name {
         font-weight: 600;
         color: $color-text-light;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 120px;
     }
 
     &__user-avatar {
@@ -56,5 +60,22 @@
         color: $color-white;
         background: linear-gradient(135deg, $accent-1, $color-primary);
         box-shadow: 0 0 22px rgba(98, 200, 255, 0.28);
+    }
+
+    &__menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        color: $color-text-light;
+        cursor: pointer;
+        padding: $spacing-xs;
+        margin-right: $spacing-sm;
+        transition: color 0.15s ease;
+
+        &:hover { color: $color-white; }
+    }
+
+    @include respond-to('md') {
+        &__menu-btn { display: flex; }
     }
 }
