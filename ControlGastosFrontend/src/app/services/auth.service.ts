@@ -19,7 +19,7 @@ export class AuthService {
             switchMap(res => {
                 const payload = JSON.parse(atob(res.token.split('.')[1]));
                 return this.http.get<Usuario>(`${this.apiUsuarios}/email/${payload.sub}`).pipe(
-                    tap(u => localStorage.setItem(this.userKey, JSON.stringify({ email: u.email, id: u.id })))
+                    tap(u => localStorage.setItem(this.userKey, JSON.stringify({ email: u.email, id: u.id, nombre: u.nombre })))
                 );
             })
         );
