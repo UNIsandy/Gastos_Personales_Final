@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
   alertas: { tipo: string; mensaje: string }[] = [];
 
   meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-  colores = ['#e53935', '#1e88e5', '#43a047', '#fb8c00', '#8e24aa', '#00acc1', '#fdd835', '#6d4c41'];
+  colores = ['#38BDF8', '#A855F7', '#7C3AED', '#22D3EE', '#8B5CF6', '#67E8F9', '#C084FC', '#2DD4BF'];
 
   constructor(private service: AnalyticsService, private cdr: ChangeDetectorRef) {}
 
@@ -85,13 +85,25 @@ export class DashboardComponent implements OnInit {
         datasets: [{
           data: categorias.map(([, v]) => v),
           backgroundColor: this.colores.slice(0, categorias.length),
-          borderWidth: 2, borderColor: '#fff'
+          borderWidth: 2, borderColor: '#1A2238'
         }]
       },
       options: {
         responsive: true,
         animation: { animateRotate: true, duration: 1000 },
-        plugins: { legend: { position: 'bottom', labels: { font: { size: 12 } } } }
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { color: '#FFFFFF', font: { size: 12 } }
+          },
+          tooltip: {
+            bodyColor: '#FFFFFF',
+            titleColor: '#A7B1C2',
+            backgroundColor: '#1A2238',
+            borderColor: '#2A344A',
+            borderWidth: 1
+          }
+        }
       }
     });
   }
@@ -116,9 +128,13 @@ export class DashboardComponent implements OnInit {
         responsive: true,
         animation: { duration: 800, easing: 'easeOutBounce' },
         scales: {
-          y: { beginAtZero: true, ticks: { callback: v => 'S/ ' + v } }
+          x: { ticks: { color: '#A7B1C2' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+          y: { beginAtZero: true, ticks: { color: '#A7B1C2', callback: v => 'S/ ' + v }, grid: { color: 'rgba(255,255,255,0.05)' } }
         },
-        plugins: { legend: { display: false } }
+        plugins: {
+          legend: { display: false },
+          tooltip: { bodyColor: '#FFFFFF', titleColor: '#A7B1C2', backgroundColor: '#1A2238', borderColor: '#2A344A', borderWidth: 1 }
+        }
       }
     });
   }
@@ -141,8 +157,8 @@ export class DashboardComponent implements OnInit {
           {
             label: 'Ingresos',
             data: ingresosData,
-            borderColor: '#43a047',
-            backgroundColor: 'rgba(67, 160, 71, 0.1)',
+            borderColor: '#38BDF8',
+            backgroundColor: 'rgba(56, 189, 248, 0.1)',
             fill: true,
             tension: 0.4,
             pointRadius: 4
@@ -150,8 +166,8 @@ export class DashboardComponent implements OnInit {
           {
             label: 'Gastos',
             data: gastosData,
-            borderColor: '#e53935',
-            backgroundColor: 'rgba(229, 57, 53, 0.1)',
+            borderColor: '#A855F7',
+            backgroundColor: 'rgba(168, 85, 247, 0.1)',
             fill: true,
             tension: 0.4,
             pointRadius: 4
@@ -163,7 +179,12 @@ export class DashboardComponent implements OnInit {
         animation: { duration: 1200, easing: 'easeInOutQuart' },
         interaction: { mode: 'index', intersect: false },
         scales: {
-          y: { beginAtZero: true, ticks: { callback: v => 'S/ ' + v } }
+          x: { ticks: { color: '#A7B1C2' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+          y: { beginAtZero: true, ticks: { color: '#A7B1C2', callback: v => 'S/ ' + v }, grid: { color: 'rgba(255,255,255,0.05)' } }
+        },
+        plugins: {
+          legend: { labels: { color: '#FFFFFF', font: { size: 12 } } },
+          tooltip: { bodyColor: '#FFFFFF', titleColor: '#A7B1C2', backgroundColor: '#1A2238', borderColor: '#2A344A', borderWidth: 1 }
         }
       }
     });
