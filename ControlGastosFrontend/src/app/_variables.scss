@@ -1,32 +1,32 @@
 // Colores principales
-$primary: #22d3ee;
-$color-primary: #22d3ee;
-$color-primary-dark: #0f172a;
-$color-primary-light: #dffbff;
+$primary: #62c8ff;
+$color-primary: #62c8ff;
+$color-primary-dark: #11102a;
+$color-primary-light: #e1f4ff;
 
-$accent-1: #8b5cf6;
-$accent-2: #f472b6;
-$accent-3: #fbbf24;
+$accent-1: #8e5ce6;
+$accent-2: #bd63e8;
+$accent-3: #7987ff;
 
-$color-ingreso: #63f09b;
-$color-ingreso-light: rgba(99, 240, 155, 0.14);
-$color-ingreso-bg: rgba(99, 240, 155, 0.2);
+$color-ingreso: #63d2ff;
+$color-ingreso-light: rgba(99, 210, 255, 0.14);
+$color-ingreso-bg: rgba(99, 210, 255, 0.2);
 
-$color-gasto: #ff7777;
-$color-gasto-light: rgba(255, 119, 119, 0.14);
-$color-gasto-bg: rgba(255, 119, 119, 0.2);
+$color-gasto: #c87dff;
+$color-gasto-light: rgba(200, 125, 255, 0.14);
+$color-gasto-bg: rgba(200, 125, 255, 0.2);
 
-$color-text: #edf7ff;
-$color-text-light: #b7c7d8;
-$color-text-muted: #7f93aa;
+$color-text: #f2f0ff;
+$color-text-light: #b9b5d2;
+$color-text-muted: #807b9f;
 
-$color-bg: #08111f;
-$color-bg-dark: #0c1a2e;
-$color-surface: rgba(15, 25, 43, 0.82);
-$color-surface-strong: rgba(23, 34, 56, 0.94);
+$color-bg: #17122f;
+$color-bg-dark: #211a43;
+$color-surface: rgba(22, 18, 50, 0.86);
+$color-surface-strong: rgba(29, 24, 62, 0.96);
 $color-white: #ffffff;
-$color-border: rgba(151, 188, 226, 0.18);
-$color-shadow: rgba(0, 0, 0, 0.34);
+$color-border: rgba(156, 140, 218, 0.19);
+$color-shadow: rgba(2, 1, 12, 0.52);
 
 // Tipografía
 $font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
@@ -46,7 +46,7 @@ $spacing-xl: 36px;
 $spacing-xxl: 56px;
 
 // Estados
-$warning: #f59e0b;
+$warning: #a98bff;
 
 // Bordes
 $border-radius-sm: 6px;
@@ -65,8 +65,8 @@ $header-height: 64px;
 $content-max-width: 1200px;
 
 // Gradientes
-$gradient-accent: linear-gradient(135deg, #2dd4bf 0%, #38bdf8 45%, #8b5cf6 100%);
-$gradient-panel: linear-gradient(145deg, rgba(30, 41, 68, 0.92), rgba(9, 18, 32, 0.86));
-$gradient-page: radial-gradient(circle at 12% 0%, rgba(45, 212, 191, 0.14), transparent 26%),
-    radial-gradient(circle at 86% 12%, rgba(139, 92, 246, 0.16), transparent 24%),
-    linear-gradient(135deg, #08111f 0%, #0d1728 48%, #101827 100%);
+$gradient-accent: linear-gradient(135deg, #aa64ed 0%, #7775f4 45%, #58c6ff 100%);
+$gradient-panel: linear-gradient(145deg, rgba(30, 25, 65, 0.94), rgba(17, 14, 42, 0.94));
+$gradient-page: radial-gradient(circle at 10% 0%, rgba(134, 105, 242, 0.26), transparent 30%),
+    radial-gradient(circle at 90% 10%, rgba(93, 190, 255, 0.18), transparent 26%),
+    linear-gradient(135deg, #17122f 0%, #211a43 49%, #1a1738 100%);

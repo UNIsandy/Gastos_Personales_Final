@@ -19,11 +19,7 @@
     margin-left: $sidebar-width;
     margin-top: $header-height;
     min-height: calc(100vh - $header-height);
-    background:
-        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-        $gradient-page;
-    background-size: 42px 42px, 42px 42px, auto;
+    background: $gradient-page;
 
     .app-content__inner {
         max-width: $content-max-width;

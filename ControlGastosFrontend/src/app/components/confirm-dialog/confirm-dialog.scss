@@ -7,7 +7,7 @@
     z-index: 1100;
     display: grid;
     place-items: center;
-    background: rgba(4, 9, 17, 0.62);
+    background: rgba(7, 5, 20, 0.72);
     backdrop-filter: blur(4px);
     padding: $spacing-lg;
     animation: overlay-in 0.18s ease;
@@ -45,7 +45,7 @@
         flex: 1;
 
         &--cancelar {
-            background: rgba(151, 188, 226, 0.12);
+            background: rgba(141, 92, 230, 0.12);
             color: $color-text;
             border: 1px solid $color-border;
         }
@@ -58,7 +58,7 @@
     &--peligroso &__btn--confirmar {
         background-image: none;
         background-color: $color-gasto;
-        box-shadow: 0 12px 30px rgba(255, 119, 119, 0.24);
+        box-shadow: 0 12px 30px rgba(200, 125, 255, 0.28);
     }
 }
 

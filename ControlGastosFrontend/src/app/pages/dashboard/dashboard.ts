@@ -23,7 +23,9 @@ export class DashboardComponent implements OnInit {
   alertas: { tipo: string; mensaje: string }[] = [];
 
   meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-  colores = ['#e53935', '#1e88e5', '#43a047', '#fb8c00', '#8e24aa', '#00acc1', '#fdd835', '#6d4c41'];
+  colores = ['#9d65ed', '#5ec8ff', '#536ce1', '#bd63e8', '#7b78f5', '#7aa8ff', '#c87dff', '#6d8cff'];
+  private readonly chartText = '#b9b5d2';
+  private readonly chartGrid = 'rgba(183, 166, 245, 0.10)';
 
   constructor(private service: AnalyticsService, private cdr: ChangeDetectorRef) {}
 
@@ -85,13 +87,19 @@ export class DashboardComponent implements OnInit {
         datasets: [{
           data: categorias.map(([, v]) => v),
           backgroundColor: this.colores.slice(0, categorias.length),
-          borderWidth: 2, borderColor: '#fff'
+          borderWidth: 3, borderColor: '#171037'
         }]
       },
       options: {
         responsive: true,
         animation: { animateRotate: true, duration: 1000 },
-        plugins: { legend: { position: 'bottom', labels: { font: { size: 12 } } } }
+        cutout: '67%',
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { color: this.chartText, font: { size: 12, weight: 600 }, padding: 16, usePointStyle: true }
+          }
+        }
       }
     });
   }
@@ -109,14 +117,21 @@ export class DashboardComponent implements OnInit {
           label: 'Gastos',
           data: categorias.map(([, v]) => v),
           backgroundColor: this.colores.slice(0, categorias.length),
-          borderRadius: 6
+          borderRadius: 8,
+          borderSkipped: false
         }]
       },
       options: {
         responsive: true,
         animation: { duration: 800, easing: 'easeOutBounce' },
         scales: {
-          y: { beginAtZero: true, ticks: { callback: v => 'S/ ' + v } }
+          x: { ticks: { color: this.chartText }, grid: { display: false }, border: { display: false } },
+          y: {
+            beginAtZero: true,
+            ticks: { color: this.chartText, callback: v => 'S/ ' + v },
+            grid: { color: this.chartGrid },
+            border: { display: false }
+          }
         },
         plugins: { legend: { display: false } }
       }
@@ -141,8 +156,8 @@ export class DashboardComponent implements OnInit {
           {
             label: 'Ingresos',
             data: ingresosData,
-            borderColor: '#43a047',
-            backgroundColor: 'rgba(67, 160, 71, 0.1)',
+            borderColor: '#5ec8ff',
+            backgroundColor: 'rgba(94, 200, 255, 0.12)',
             fill: true,
             tension: 0.4,
             pointRadius: 4
@@ -150,8 +165,8 @@ export class DashboardComponent implements OnInit {
           {
             label: 'Gastos',
             data: gastosData,
-            borderColor: '#e53935',
-            backgroundColor: 'rgba(229, 57, 53, 0.1)',
+            borderColor: '#a36bf2',
+            backgroundColor: 'rgba(163, 107, 242, 0.16)',
             fill: true,
             tension: 0.4,
             pointRadius: 4
@@ -163,7 +178,13 @@ export class DashboardComponent implements OnInit {
         animation: { duration: 1200, easing: 'easeInOutQuart' },
         interaction: { mode: 'index', intersect: false },
         scales: {
-          y: { beginAtZero: true, ticks: { callback: v => 'S/ ' + v } }
+          x: { ticks: { color: this.chartText }, grid: { color: this.chartGrid }, border: { display: false } },
+          y: {
+            beginAtZero: true,
+            ticks: { color: this.chartText, callback: v => 'S/ ' + v },
+            grid: { color: this.chartGrid },
+            border: { display: false }
+          }
         }
       }
     });

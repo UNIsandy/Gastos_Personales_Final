@@ -7,7 +7,7 @@
     left: 0;
     right: 0;
     height: $header-height;
-    background: rgba(9, 16, 29, 0.88);
+    background: rgba(17, 13, 39, 0.9);
     color: $color-white;
     display: flex;
     align-items: center;
@@ -15,7 +15,7 @@
     padding: 0 $spacing-lg;
     z-index: 1000;
     box-shadow: 0 14px 40px rgba(0, 0, 0, 0.28);
-    border-bottom: 1px solid rgba(151, 188, 226, 0.14);
+    border-bottom: 1px solid rgba(166, 143, 235, 0.16);
     backdrop-filter: blur(18px);
 
     &__brand,
@@ -25,7 +25,6 @@
         gap: $spacing-sm;
     }
 
-    &__logo,
     &__user-avatar {
         display: grid;
         place-items: center;
@@ -36,9 +35,11 @@
     }
 
     &__logo {
-        color: #102033;
-        background: linear-gradient(135deg, $accent-3, #fef3c7);
-        box-shadow: 0 0 22px rgba(251, 191, 36, 0.35);
+        display: block;
+        width: 142px;
+        height: 46px;
+        object-fit: contain;
+        object-position: left center;
     }
 
     &__title {
@@ -57,6 +58,6 @@
         border-radius: 50%;
         color: $color-white;
         background: linear-gradient(135deg, $accent-1, $color-primary);
-        box-shadow: 0 0 22px rgba(34, 211, 238, 0.28);
+        box-shadow: 0 0 22px rgba(98, 200, 255, 0.28);
     }
 }
