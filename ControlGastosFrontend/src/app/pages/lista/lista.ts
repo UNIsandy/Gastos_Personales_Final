@@ -7,6 +7,7 @@ import { Transaccion } from '../../models';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { NotificationService } from '../../services/notification.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-lista',
@@ -66,7 +67,7 @@ export class ListaComponent implements OnInit {
     const hoy = new Date();
     const mes = hoy.getMonth() + 1;
     const anio = hoy.getFullYear();
-    this.http.get(`http://localhost:8080/api/reportes/mensual/${usuarioId}/${mes}/${anio}`, {
+    this.http.get(`${environment.apiUrl}/api/reportes/mensual/${usuarioId}/${mes}/${anio}`, {
       responseType: 'blob'
     }).subscribe({
       next: (blob) => {
